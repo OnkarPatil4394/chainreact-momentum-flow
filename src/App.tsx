@@ -10,11 +10,14 @@ import Stats from "./pages/Stats";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import LoadingScreen from "./components/LoadingScreen";
+import WelcomeScreen from "./components/WelcomeScreen";
+import { db } from "./db/database";
 
 const queryClient = new QueryClient();
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [showWelcome, setShowWelcome] = useState(false);
 
   useEffect(() => {
     // Add custom font to document head
@@ -25,11 +28,25 @@ const App = () => {
     
     // Apply font to body
     document.body.classList.add('font-poppins');
+    
+    // Check if this is the first time opening the app
+    const isFirstTime = db.isFirstTimeUser();
+    if (isFirstTime) {
+      setShowWelcome(true);
+    }
   }, []);
 
   const handleLoadingFinished = () => {
     setIsLoading(false);
   };
+  
+  const handleWelcomeComplete = () => {
+    setShowWelcome(false);
+  };
+
+  if (showWelcome) {
+    return <WelcomeScreen onComplete={handleWelcomeComplete} />;
+  }
 
   return (
     <QueryClientProvider client={queryClient}>

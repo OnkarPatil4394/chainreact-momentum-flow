@@ -270,6 +270,7 @@ class Database {
   // Export data
   exportData(): string {
     const data = {
+      userName: this.getUserName(),
       chains: this.getChains(),
       stats: this.getStats(),
       settings: this.getSettings(),
@@ -285,6 +286,12 @@ class Database {
         this.saveChains(data.chains);
         this.saveStats(data.stats);
         this.saveSettings(data.settings);
+        
+        // Import user name if available
+        if (data.userName) {
+          this.saveUserName(data.userName);
+        }
+        
         return true;
       }
       return false;
@@ -292,6 +299,20 @@ class Database {
       console.error("Failed to import data:", e);
       return false;
     }
+  }
+  
+  // User name operations
+  saveUserName(name: string): void {
+    localStorage.setItem("userName", name);
+  }
+  
+  getUserName(): string {
+    return localStorage.getItem("userName") || "";
+  }
+  
+  // Check if this is the first time opening the app
+  isFirstTimeUser(): boolean {
+    return !localStorage.getItem("userName");
   }
 }
 

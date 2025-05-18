@@ -8,6 +8,7 @@ import { UserStats } from '../types/types';
 const Header = () => {
   const location = useLocation();
   const [stats, setStats] = React.useState<UserStats>(db.getStats());
+  const [userName, setUserName] = React.useState(db.getUserName());
 
   // Determine which link is active
   const isActive = (path: string) => {
@@ -15,9 +16,10 @@ const Header = () => {
   };
 
   React.useEffect(() => {
-    // Listen for changes in stats
+    // Listen for changes in stats and username
     const interval = setInterval(() => {
       setStats(db.getStats());
+      setUserName(db.getUserName());
     }, 1000);
     
     return () => clearInterval(interval);
@@ -31,6 +33,9 @@ const Header = () => {
           <div className="flex items-center">
             <h1 className="text-xl font-bold text-blue-600">ChainReact</h1>
             <div className="ml-3 text-sm bg-gray-100 text-gray-700 px-2 py-1 rounded-full flex items-center">
+              {userName && (
+                <span className="mr-2 font-medium">{userName}</span>
+              )}
               <span>Lvl {stats.level}</span>
               <span className="mx-1">•</span>
               <span>{stats.totalXp} XP</span>
