@@ -32,6 +32,38 @@ const initialStats: UserStats = {
       iconName: "star",
       unlockedAt: null,
       unlocked: false
+    },
+    {
+      id: "badge-14-day-streak",
+      name: "Fortnight Champion",
+      description: "Complete a habit chain for 14 days in a row",
+      iconName: "star",
+      unlockedAt: null,
+      unlocked: false
+    },
+    {
+      id: "badge-30-day-streak",
+      name: "Monthly Master",
+      description: "Complete a habit chain for 30 days in a row",
+      iconName: "star",
+      unlockedAt: null,
+      unlocked: false
+    },
+    {
+      id: "badge-5-chains",
+      name: "Chain Collector",
+      description: "Create 5 different habit chains",
+      iconName: "badge",
+      unlockedAt: null,
+      unlocked: false
+    },
+    {
+      id: "badge-100-completions",
+      name: "Century Club",
+      description: "Complete 100 total habits",
+      iconName: "badge-check",
+      unlockedAt: null,
+      unlocked: false
     }
   ]
 };
@@ -199,6 +231,34 @@ class Database {
       stats.badges[2].unlocked = true;
       stats.badges[2].unlockedAt = new Date().toISOString();
       stats.totalXp += 200;
+    }
+    
+    // 14-day streak badge
+    if (stats.streakDays >= 14 && !stats.badges[3].unlocked) {
+      stats.badges[3].unlocked = true;
+      stats.badges[3].unlockedAt = new Date().toISOString();
+      stats.totalXp += 300;
+    }
+    
+    // 30-day streak badge
+    if (stats.streakDays >= 30 && !stats.badges[4].unlocked) {
+      stats.badges[4].unlocked = true;
+      stats.badges[4].unlockedAt = new Date().toISOString();
+      stats.totalXp += 500;
+    }
+    
+    // 5 chains badge
+    if (chains.length >= 5 && !stats.badges[5].unlocked) {
+      stats.badges[5].unlocked = true;
+      stats.badges[5].unlockedAt = new Date().toISOString();
+      stats.totalXp += 250;
+    }
+    
+    // 100 completions badge
+    if (stats.totalCompletions >= 100 && !stats.badges[6].unlocked) {
+      stats.badges[6].unlocked = true;
+      stats.badges[6].unlockedAt = new Date().toISOString();
+      stats.totalXp += 400;
     }
     
     // Calculate level based on XP (100 XP per level)
