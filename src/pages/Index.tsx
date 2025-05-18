@@ -6,6 +6,7 @@ import Header from '../components/Header';
 import HabitChain from '../components/HabitChain';
 import ProgressSection from '../components/ProgressSection';
 import CreateHabitModal from '../components/CreateHabitModal';
+import HowToUse from '../components/HowToUse';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 
@@ -52,6 +53,9 @@ const Index = () => {
           <h2 className="text-xl font-bold text-gray-800">{currentDate}</h2>
           <p className="text-sm text-gray-600">Your daily habit chains</p>
         </div>
+        
+        {/* How to use section */}
+        <HowToUse />
         
         {/* Progress section */}
         <ProgressSection />

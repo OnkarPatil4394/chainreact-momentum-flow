@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Trophy, BarChart2, Settings } from 'lucide-react';
+import { Trophy, BarChart2, Settings, HelpCircle } from 'lucide-react';
 import { db } from '../db/database';
 import { UserStats } from '../types/types';
 
