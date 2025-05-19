@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft, HardDriveDownload, Shield } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Switch } from '@/components/ui/switch';
-import { db } from '../db/database';
+import { db } from '@/db/database';
 import { toast } from '@/hooks/use-toast';
 
 const Permissions = () => {
