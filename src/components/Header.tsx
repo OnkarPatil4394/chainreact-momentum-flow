@@ -12,7 +12,7 @@ const Header = () => {
 
   // Determine which link is active
   const isActive = (path: string) => {
-    return location.pathname === path ? 'text-blue-500' : 'text-gray-600';
+    return location.pathname === path ? 'text-blue-500' : 'text-gray-600 dark:text-gray-300';
   };
 
   React.useEffect(() => {
@@ -26,13 +26,13 @@ const Header = () => {
   }, []);
 
   return (
-    <header className="sticky top-0 z-10 bg-white border-b border-gray-100">
+    <header className="sticky top-0 z-10 bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
       <div className="container px-4 mx-auto">
         <div className="flex items-center justify-between h-16">
           {/* Logo and title */}
           <div className="flex items-center">
-            <h1 className="text-xl font-bold text-blue-600">ChainReact</h1>
-            <div className="ml-3 text-sm bg-gray-100 text-gray-700 px-2 py-1 rounded-full flex items-center">
+            <h1 className="text-xl font-bold text-blue-600 dark:text-blue-400">ChainReact</h1>
+            <div className="ml-3 text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 px-2 py-1 rounded-full flex items-center">
               {userName && (
                 <span className="mr-2 font-medium">{userName}</span>
               )}

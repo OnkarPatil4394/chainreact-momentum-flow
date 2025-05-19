@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import { Button } from '@/components/ui/button';
@@ -31,6 +30,13 @@ const Settings = () => {
   
   useEffect(() => {
     setSettings(db.getSettings());
+    
+    // Apply dark mode based on saved setting
+    if (settings.darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
   }, []);
   
   const handleToggleNotifications = () => {
@@ -57,12 +63,16 @@ const Settings = () => {
     setSettings(updatedSettings);
     db.saveSettings(updatedSettings);
     
+    // Apply dark mode change to the document
+    if (updatedSettings.darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    
     toast({
       title: updatedSettings.darkMode ? 'Dark mode enabled' : 'Light mode enabled',
     });
-    
-    // Apply dark mode (would normally update CSS variables or class)
-    // This is just a placeholder as we're not implementing full dark mode in this version
   };
   
   const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -92,6 +102,7 @@ const Settings = () => {
         description: 'Your habits and progress have been saved to a file',
       });
     } catch (error) {
+      console.error('Export error:', error);
       toast({
         title: 'Export failed',
         description: 'There was a problem exporting your data',
@@ -114,6 +125,14 @@ const Settings = () => {
           // Refresh settings after import
           setSettings(db.getSettings());
           
+          // Apply dark mode if needed after import
+          const updatedSettings = db.getSettings();
+          if (updatedSettings.darkMode) {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+          
           toast({
             title: 'Data imported successfully',
             description: 'Your habits and progress have been restored',
@@ -126,6 +145,7 @@ const Settings = () => {
           });
         }
       } catch (error) {
+        console.error('Import error:', error);
         toast({
           title: 'Import failed',
           description: 'There was a problem importing your data',

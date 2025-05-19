@@ -40,38 +40,38 @@ const Permissions = () => {
         >
           <ArrowLeft size={16} />
         </Button>
-        <h2 className="text-xl font-bold text-gray-800">App Permissions</h2>
+        <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200">App Permissions</h2>
       </div>
 
       <Card className="mb-6">
         <CardContent className="p-4">
           <div className="flex items-start p-2 mb-4">
-            <Shield className="h-8 w-8 text-blue-500 mr-3 flex-shrink-0" />
+            <Shield className="h-8 w-8 text-blue-500 dark:text-blue-400 mr-3 flex-shrink-0" />
             <div>
-              <h3 className="font-medium text-gray-800 mb-1">Why Permissions Matter</h3>
-              <p className="text-sm text-gray-600">
+              <h3 className="font-medium text-gray-800 dark:text-gray-200 mb-1">Why Permissions Matter</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
                 ChainReact is designed to respect your privacy. We only request permissions that are essential for the app's core functionality.
               </p>
             </div>
           </div>
 
-          <div className="border-t border-gray-100 pt-4 mt-2">
+          <div className="border-t border-gray-100 dark:border-gray-700 pt-4 mt-2">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center">
-                <HardDriveDownload className="h-5 w-5 text-gray-700 mr-2" />
-                <span className="font-medium text-gray-800">Storage Access</span>
+                <HardDriveDownload className="h-5 w-5 text-gray-700 dark:text-gray-300 mr-2" />
+                <span className="font-medium text-gray-800 dark:text-gray-200">Storage Access</span>
               </div>
               <Switch 
                 checked={storageEnabled}
                 onCheckedChange={handleStorageToggle}
               />
             </div>
-            <p className="text-sm text-gray-600 mt-1 mb-3">
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 mb-3">
               Allows ChainReact to create and access backup files on your device. 
               This permission is required for exporting and importing your habit data.
             </p>
             
-            <div className="bg-blue-50 border border-blue-100 rounded p-3 text-xs text-blue-800">
+            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 rounded p-3 text-xs text-blue-800 dark:text-blue-200">
               <p className="mb-2">
                 <strong>How this permission is used:</strong>
               </p>
@@ -85,7 +85,7 @@ const Permissions = () => {
         </CardContent>
       </Card>
       
-      <p className="text-xs text-gray-500 px-1">
+      <p className="text-xs text-gray-500 dark:text-gray-400 px-1">
         You can modify permissions at any time through this settings page or through your device's system settings.
       </p>
     </div>

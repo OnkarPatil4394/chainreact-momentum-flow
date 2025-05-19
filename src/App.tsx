@@ -38,6 +38,12 @@ const App = () => {
     // Apply font to body
     document.body.classList.add('font-poppins');
     
+    // Apply dark mode if enabled in settings
+    const settings = db.getSettings();
+    if (settings.darkMode) {
+      document.documentElement.classList.add('dark');
+    }
+    
     // Check if this is the first time opening the app
     const isFirstTime = db.isFirstTimeUser();
     if (isFirstTime) {
