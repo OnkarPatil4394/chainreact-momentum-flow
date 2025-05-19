@@ -4,22 +4,30 @@ import { Dialog } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { X, Plus, Trash } from 'lucide-react';
+import { X, Plus, Trash, Trash2 } from 'lucide-react';
 import { HabitChain, Habit } from '../types/types';
 import { db, generateId } from '../db/database';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { toast } from '@/hooks/use-toast';
 
 interface CreateHabitModalProps {
   open: boolean;
   onClose: () => void;
+  editingChain?: HabitChain;
 }
 
-const CreateHabitModal: React.FC<CreateHabitModalProps> = ({ open, onClose }) => {
-  const [chainName, setChainName] = useState('');
-  const [chainDescription, setChainDescription] = useState('');
-  const [habits, setHabits] = useState<Omit<Habit, 'chainId' | 'completed' | 'completedAt'>[]>([
-    { id: generateId(), name: '', description: '', position: 0 }
-  ]);
+const CreateHabitModal: React.FC<CreateHabitModalProps> = ({ open, onClose, editingChain }) => {
+  const [chainName, setChainName] = useState(editingChain?.name || '');
+  const [chainDescription, setChainDescription] = useState(editingChain?.description || '');
+  const [habits, setHabits] = useState<Omit<Habit, 'chainId' | 'completed' | 'completedAt'>[]>(
+    editingChain?.habits.map(h => ({ 
+      id: h.id,
+      name: h.name,
+      description: h.description,
+      position: h.position
+    })) || 
+    [{ id: generateId(), name: '', description: '', position: 0 }]
+  );
 
   const handleAddHabit = () => {
     setHabits([
@@ -52,6 +60,18 @@ const CreateHabitModal: React.FC<CreateHabitModalProps> = ({ open, onClose }) =>
     ));
   };
 
+  const handleDeleteChain = () => {
+    if (editingChain && confirm('Are you sure you want to delete this habit chain?')) {
+      db.deleteChain(editingChain.id);
+      toast({
+        title: "Habit chain deleted",
+        description: "Your habit chain has been removed",
+        duration: 3000,
+      });
+      onClose();
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -59,25 +79,53 @@ const CreateHabitModal: React.FC<CreateHabitModalProps> = ({ open, onClose }) =>
     if (!chainName.trim()) return;
     if (habits.some(h => !h.name.trim())) return;
     
-    const newChainId = generateId();
-    const newChain: HabitChain = {
-      id: newChainId,
-      name: chainName,
-      description: chainDescription,
-      habits: habits.map(h => ({
-        ...h,
-        chainId: newChainId,
-        completed: false,
-        completedAt: null
-      })),
-      createdAt: new Date().toISOString(),
-      lastCompleted: null,
-      streak: 0,
-      longestStreak: 0,
-      totalCompletions: 0
-    };
-    
-    db.addChain(newChain);
+    if (editingChain) {
+      // Update existing chain
+      const updatedChain: HabitChain = {
+        ...editingChain,
+        name: chainName,
+        description: chainDescription,
+        habits: habits.map(h => ({
+          ...h,
+          chainId: editingChain.id,
+          completed: false,
+          completedAt: null
+        }))
+      };
+      
+      db.updateChain(updatedChain);
+      toast({
+        title: "Habit chain updated",
+        description: "Your changes have been saved",
+        duration: 3000,
+      });
+    } else {
+      // Create new chain
+      const newChainId = generateId();
+      const newChain: HabitChain = {
+        id: newChainId,
+        name: chainName,
+        description: chainDescription,
+        habits: habits.map(h => ({
+          ...h,
+          chainId: newChainId,
+          completed: false,
+          completedAt: null
+        })),
+        createdAt: new Date().toISOString(),
+        lastCompleted: null,
+        streak: 0,
+        longestStreak: 0,
+        totalCompletions: 0
+      };
+      
+      db.addChain(newChain);
+      toast({
+        title: "Habit chain created",
+        description: "Start building momentum with your new chain",
+        duration: 3000,
+      });
+    }
     
     // Reset form and close modal
     setChainName('');
@@ -85,24 +133,30 @@ const CreateHabitModal: React.FC<CreateHabitModalProps> = ({ open, onClose }) =>
     setHabits([{ id: generateId(), name: '', description: '', position: 0 }]);
     onClose();
   };
-  
+
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <div className={`fixed inset-0 z-50 flex items-center justify-center p-4 ${open ? '' : 'hidden'}`}>
-        <div className="fixed inset-0 bg-black/20" onClick={onClose}></div>
+        <div className="fixed inset-0 bg-black/20 dark:bg-black/50" onClick={onClose}></div>
         <div className="w-full max-w-md mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden z-10 flex flex-col max-h-[90vh]">
+          {/* Fixed header */}
           <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-gray-700">
-            <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200">Create Habit Chain</h2>
-            <button onClick={onClose} className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+            <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+              {editingChain ? 'Edit Habit Chain' : 'Create Habit Chain'}
+            </h2>
+            <button
+              onClick={onClose}
+              className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            >
               <X size={20} />
             </button>
           </div>
           
           <form onSubmit={handleSubmit} className="flex flex-col h-full">
-            <ScrollArea className="flex-1 overflow-y-auto">
-              <div className="p-4 space-y-4">
-                {/* Chain details */}
-                <div className="space-y-2">
+            <div className="p-4 space-y-4 flex-shrink-0">
+              {/* Chain details */}
+              <div className="flex items-end gap-2">
+                <div className="space-y-2 flex-1">
                   <label htmlFor="chainName" className="text-sm font-medium text-gray-700 dark:text-gray-300">
                     Chain Name
                   </label>
@@ -112,26 +166,42 @@ const CreateHabitModal: React.FC<CreateHabitModalProps> = ({ open, onClose }) =>
                     onChange={e => setChainName(e.target.value)}
                     placeholder="Morning Routine"
                     required
-                    className="w-full"
+                    className="w-full dark:bg-gray-700 dark:border-gray-600"
                   />
                 </div>
                 
-                <div className="space-y-2">
-                  <label htmlFor="chainDescription" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Description (Optional)
-                  </label>
-                  <Textarea
-                    id="chainDescription"
-                    value={chainDescription}
-                    onChange={e => setChainDescription(e.target.value)}
-                    placeholder="My daily morning routine for productivity"
-                    className="w-full"
-                    rows={2}
-                  />
-                </div>
-                
-                {/* Habits */}
-                <div className="space-y-4">
+                {editingChain && (
+                  <Button 
+                    type="button"
+                    variant="destructive" 
+                    size="icon"
+                    onClick={handleDeleteChain}
+                    title="Delete chain"
+                  >
+                    <Trash2 size={16} />
+                  </Button>
+                )}
+              </div>
+              
+              <div className="space-y-2">
+                <label htmlFor="chainDescription" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Description (Optional)
+                </label>
+                <Textarea
+                  id="chainDescription"
+                  value={chainDescription}
+                  onChange={e => setChainDescription(e.target.value)}
+                  placeholder="My daily routine for productivity"
+                  className="w-full dark:bg-gray-700 dark:border-gray-600"
+                  rows={2}
+                />
+              </div>
+            </div>
+            
+            {/* Scrollable habits section */}
+            <div className="flex-1 overflow-hidden">
+              <ScrollArea className="h-full px-4">
+                <div className="space-y-4 pb-4">
                   <div className="flex justify-between items-center">
                     <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">Habits</h3>
                     <span className="text-xs text-gray-500 dark:text-gray-400">Will unlock in sequence</span>
@@ -180,15 +250,16 @@ const CreateHabitModal: React.FC<CreateHabitModalProps> = ({ open, onClose }) =>
                     Add Habit
                   </Button>
                 </div>
-              </div>
-            </ScrollArea>
+              </ScrollArea>
+            </div>
             
-            <div className="flex space-x-3 p-4 border-t border-gray-100 dark:border-gray-700 mt-auto">
+            {/* Fixed footer with action buttons */}
+            <div className="flex space-x-3 p-4 border-t border-gray-100 dark:border-gray-700 flex-shrink-0">
               <Button 
                 type="button"
                 variant="outline"
                 onClick={onClose}
-                className="flex-1"
+                className="flex-1 dark:border-gray-600 dark:hover:bg-gray-700"
               >
                 Cancel
               </Button>
@@ -196,7 +267,7 @@ const CreateHabitModal: React.FC<CreateHabitModalProps> = ({ open, onClose }) =>
                 type="submit"
                 className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
               >
-                Create Chain
+                {editingChain ? 'Save Changes' : 'Create Chain'}
               </Button>
             </div>
           </form>

@@ -1,62 +1,71 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Trophy, BarChart2, Settings, HelpCircle } from 'lucide-react';
-import { db } from '../db/database';
-import { UserStats } from '../types/types';
+import { Button } from '@/components/ui/button';
+import { Home, BarChart2, Settings } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 const Header = () => {
   const location = useLocation();
-  const [stats, setStats] = React.useState<UserStats>(db.getStats());
-  const [userName, setUserName] = React.useState(db.getUserName());
-
-  // Determine which link is active
-  const isActive = (path: string) => {
-    return location.pathname === path ? 'text-blue-500' : 'text-gray-600 dark:text-gray-300';
-  };
-
-  React.useEffect(() => {
-    // Listen for changes in stats and username
-    const interval = setInterval(() => {
-      setStats(db.getStats());
-      setUserName(db.getUserName());
-    }, 1000);
-    
-    return () => clearInterval(interval);
-  }, []);
-
+  const [activeTab, setActiveTab] = useState('home');
+  
+  useEffect(() => {
+    // Update active tab based on current path
+    const path = location.pathname;
+    if (path === '/') {
+      setActiveTab('home');
+    } else if (path === '/stats') {
+      setActiveTab('stats');
+    } else if (path === '/settings') {
+      setActiveTab('settings');
+    }
+  }, [location]);
+  
   return (
-    <header className="sticky top-0 z-10 bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
-      <div className="container px-4 mx-auto">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo and title */}
-          <div className="flex items-center">
-            <h1 className="text-xl font-bold text-blue-600 dark:text-blue-400">ChainReact</h1>
-            <div className="ml-3 text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 px-2 py-1 rounded-full flex items-center">
-              {userName && (
-                <span className="mr-2 font-medium">{userName}</span>
-              )}
-              <span>Lvl {stats.level}</span>
-              <span className="mx-1">•</span>
-              <span>{stats.totalXp} XP</span>
-            </div>
+    <header className="bg-white dark:bg-gray-800 shadow-sm">
+      <div className="container mx-auto px-4 py-4">
+        {/* App Name */}
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-1.5">
+            <h1 className="text-lg font-bold text-blue-600 dark:text-blue-400">ChainReact</h1>
+            <Badge className="bg-blue-500 text-white text-[10px] h-5">Beta</Badge>
           </div>
+        </div>
+        
+        {/* Navigation tabs */}
+        <div className="flex items-center justify-between">
+          <Link to="/">
+            <Button
+              variant={activeTab === 'home' ? 'default' : 'ghost'}
+              size="sm"
+              className="flex flex-col items-center px-4 py-2 h-auto"
+            >
+              <Home size={18} />
+              <span className="text-xs mt-1">Home</span>
+            </Button>
+          </Link>
           
-          {/* Navigation */}
-          <nav className="flex items-center space-x-6">
-            <Link to="/" className={`${isActive('/')} flex flex-col items-center text-xs`}>
-              <Trophy size={18} />
-              <span>Habits</span>
-            </Link>
-            <Link to="/stats" className={`${isActive('/stats')} flex flex-col items-center text-xs`}>
+          <Link to="/stats">
+            <Button
+              variant={activeTab === 'stats' ? 'default' : 'ghost'}
+              size="sm"
+              className="flex flex-col items-center px-4 py-2 h-auto"
+            >
               <BarChart2 size={18} />
-              <span>Stats</span>
-            </Link>
-            <Link to="/settings" className={`${isActive('/settings')} flex flex-col items-center text-xs`}>
+              <span className="text-xs mt-1">Stats</span>
+            </Button>
+          </Link>
+          
+          <Link to="/settings">
+            <Button
+              variant={activeTab === 'settings' ? 'default' : 'ghost'}
+              size="sm"
+              className="flex flex-col items-center px-4 py-2 h-auto"
+            >
               <Settings size={18} />
-              <span>Settings</span>
-            </Link>
-          </nav>
+              <span className="text-xs mt-1">Settings</span>
+            </Button>
+          </Link>
         </div>
       </div>
     </header>

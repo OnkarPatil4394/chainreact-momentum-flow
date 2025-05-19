@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import { Button } from '@/components/ui/button';
@@ -19,7 +20,6 @@ import {
   Shield,
   Info,
   Code2,
-  Clock,
   HelpCircle,
   Bell
 } from 'lucide-react';
@@ -52,6 +52,7 @@ const Settings = () => {
       description: updatedSettings.notificationsEnabled 
         ? 'You will receive habit reminders' 
         : 'You will not receive habit reminders',
+      duration: 3000,
     });
   };
   
@@ -72,6 +73,7 @@ const Settings = () => {
     
     toast({
       title: updatedSettings.darkMode ? 'Dark mode enabled' : 'Light mode enabled',
+      duration: 3000,
     });
   };
   
@@ -100,6 +102,7 @@ const Settings = () => {
       toast({
         title: 'Data exported successfully',
         description: 'Your habits and progress have been saved to a file',
+        duration: 3000,
       });
     } catch (error) {
       console.error('Export error:', error);
@@ -107,6 +110,7 @@ const Settings = () => {
         title: 'Export failed',
         description: 'There was a problem exporting your data',
         variant: 'destructive',
+        duration: 3000,
       });
     }
   };
@@ -136,12 +140,14 @@ const Settings = () => {
           toast({
             title: 'Data imported successfully',
             description: 'Your habits and progress have been restored',
+            duration: 3000,
           });
         } else {
           toast({
             title: 'Import failed',
             description: 'Invalid backup file format',
             variant: 'destructive',
+            duration: 3000,
           });
         }
       } catch (error) {
@@ -150,6 +156,7 @@ const Settings = () => {
           title: 'Import failed',
           description: 'There was a problem importing your data',
           variant: 'destructive',
+          duration: 3000,
         });
       }
     };
@@ -170,6 +177,7 @@ const Settings = () => {
       toast({
         title: 'Data reset complete',
         description: 'All habits and progress have been cleared',
+        duration: 3000,
       });
     }
   };
@@ -177,40 +185,40 @@ const Settings = () => {
   // Link component for settings items
   const SettingsLink = ({ to, icon, title, description }: { to: string, icon: React.ReactNode, title: string, description: string }) => (
     <Link to={to}>
-      <div className="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg transition-colors">
+      <div className="flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
         <div className="flex items-start">
-          <div className="h-8 w-8 flex items-center justify-center text-gray-600 mr-3">
+          <div className="h-8 w-8 flex items-center justify-center text-gray-600 dark:text-gray-400 mr-3">
             {icon}
           </div>
           <div>
-            <h3 className="text-base font-medium text-gray-800">{title}</h3>
-            <p className="text-xs text-gray-500 mt-0.5">{description}</p>
+            <h3 className="text-base font-medium text-gray-800 dark:text-gray-200">{title}</h3>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{description}</p>
           </div>
         </div>
-        <ChevronRight size={18} className="text-gray-400" />
+        <ChevronRight size={18} className="text-gray-400 dark:text-gray-500" />
       </div>
     </Link>
   );
   
   return (
-    <div className="min-h-screen bg-gray-50 pb-16">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pb-16">
       <Header />
       
       <main className="container mx-auto px-4 py-6">
         <div className="mb-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-1">Settings</h2>
-          <p className="text-sm text-gray-600">Customize ChainReact to your preferences</p>
+          <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-1">Settings</h2>
+          <p className="text-sm text-gray-600 dark:text-gray-400">Customize ChainReact to your preferences</p>
         </div>
         
         {/* Display options */}
-        <Card className="mb-6 p-4">
-          <h3 className="text-base font-medium text-gray-800 mb-4">Display Options</h3>
+        <Card className="mb-6 p-4 dark:bg-gray-800 dark:border-gray-700">
+          <h3 className="text-base font-medium text-gray-800 dark:text-gray-200 mb-4">Display Options</h3>
           
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
                 <Label htmlFor="darkMode" className="text-sm font-medium">Dark Mode</Label>
-                <p className="text-xs text-gray-500">Use dark theme throughout the app</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Use dark theme throughout the app</p>
               </div>
               <Switch 
                 id="darkMode"
@@ -222,14 +230,14 @@ const Settings = () => {
         </Card>
         
         {/* Notifications */}
-        <Card className="mb-6 p-4">
-          <h3 className="text-base font-medium text-gray-800 mb-4">Notifications</h3>
+        <Card className="mb-6 p-4 dark:bg-gray-800 dark:border-gray-700">
+          <h3 className="text-base font-medium text-gray-800 dark:text-gray-200 mb-4">Notifications</h3>
           
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
                 <Label htmlFor="notifications" className="text-sm font-medium">Enable Reminders</Label>
-                <p className="text-xs text-gray-500">Get reminders for your habits</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Get reminders for your habits</p>
               </div>
               <Switch 
                 id="notifications"
@@ -246,7 +254,7 @@ const Settings = () => {
                   type="time"
                   value={settings.reminderTime}
                   onChange={handleTimeChange}
-                  className="mt-1"
+                  className="mt-1 dark:bg-gray-700 dark:border-gray-600"
                 />
               </div>
             )}
@@ -254,17 +262,17 @@ const Settings = () => {
         </Card>
         
         {/* Data Management */}
-        <Card className="mb-6 p-4">
-          <h3 className="text-base font-medium text-gray-800 mb-4">Data Management</h3>
+        <Card className="mb-6 p-4 dark:bg-gray-800 dark:border-gray-700">
+          <h3 className="text-base font-medium text-gray-800 dark:text-gray-200 mb-4">Data Management</h3>
           
           <div className="space-y-4">
             <div className="flex flex-col space-y-2">
               <Label htmlFor="exportData" className="text-sm font-medium">Export Data</Label>
-              <p className="text-xs text-gray-500 mb-2">Save a backup of your habits and progress</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Save a backup of your habits and progress</p>
               <Button 
                 onClick={handleExportData}
                 variant="outline"
-                className="flex items-center"
+                className="flex items-center dark:border-gray-600 dark:hover:bg-gray-700"
               >
                 <Download size={16} className="mr-2" />
                 Export Data
@@ -273,7 +281,7 @@ const Settings = () => {
             
             <div className="flex flex-col space-y-2">
               <Label htmlFor="importData" className="text-sm font-medium">Import Data</Label>
-              <p className="text-xs text-gray-500 mb-2">Restore from a previous backup</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Restore from a previous backup</p>
               <div className="flex items-center">
                 <input
                   type="file"
@@ -285,7 +293,7 @@ const Settings = () => {
                 <Button 
                   onClick={() => document.getElementById('importData')?.click()}
                   variant="outline"
-                  className="flex items-center"
+                  className="flex items-center dark:border-gray-600 dark:hover:bg-gray-700"
                 >
                   <Upload size={16} className="mr-2" />
                   Import Data
@@ -295,11 +303,11 @@ const Settings = () => {
             
             <div className="pt-2">
               <div className="flex flex-col space-y-2">
-                <Label className="text-sm font-medium text-red-600">Danger Zone</Label>
+                <Label className="text-sm font-medium text-red-600 dark:text-red-400">Danger Zone</Label>
                 <Button 
                   onClick={handleResetData}
                   variant="outline"
-                  className="border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 flex items-center"
+                  className="border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 flex items-center dark:border-red-900 dark:text-red-400 dark:hover:bg-red-950"
                 >
                   <Trash size={16} className="mr-2" />
                   Reset All Data
@@ -310,7 +318,7 @@ const Settings = () => {
         </Card>
         
         {/* Permissions */}
-        <Card className="mb-6">
+        <Card className="mb-6 dark:bg-gray-800 dark:border-gray-700">
           <SettingsLink 
             to="/permissions"
             icon={<Shield size={20} />}
@@ -320,10 +328,10 @@ const Settings = () => {
         </Card>
         
         {/* Legal & Info */}
-        <Card className="mb-6">
-          <h3 className="text-base font-medium text-gray-800 px-4 pt-4 pb-2">Legal & Info</h3>
+        <Card className="mb-6 dark:bg-gray-800 dark:border-gray-700">
+          <h3 className="text-base font-medium text-gray-800 dark:text-gray-200 px-4 pt-4 pb-2">Legal & Info</h3>
           
-          <div className="border-t border-gray-100">
+          <div className="border-t border-gray-100 dark:border-gray-700">
             <SettingsLink 
               to="/privacy-policy"
               icon={<FileText size={20} />}
@@ -346,13 +354,6 @@ const Settings = () => {
             />
             
             <SettingsLink 
-              to="/changelog"
-              icon={<Clock size={20} />}
-              title="Changelog"
-              description="See what's new in each version"
-            />
-            
-            <SettingsLink 
               to="/app-info"
               icon={<Info size={20} />}
               title="App Version & Info"
@@ -362,20 +363,23 @@ const Settings = () => {
         </Card>
         
         {/* About */}
-        <Card className="p-4">
-          <h3 className="text-base font-medium text-gray-800 mb-2">About ChainReact</h3>
-          <p className="text-sm text-gray-600 mb-4">A minimalist, gamified habit tracker built to run 100% offline</p>
+        <Card className="p-4 dark:bg-gray-800 dark:border-gray-700">
+          <h3 className="text-base font-medium text-gray-800 dark:text-gray-200 mb-2">About ChainReact</h3>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">A minimalist, gamified habit tracker built to run 100% offline</p>
           
-          <div className="bg-blue-50 border border-blue-100 rounded-lg p-3 flex items-start">
+          <div className="bg-blue-50 border border-blue-100 rounded-lg p-3 flex items-start dark:bg-blue-900/30 dark:border-blue-900">
             <AlertCircle size={18} className="text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
-            <p className="text-xs text-blue-700 leading-relaxed">
+            <p className="text-xs text-blue-700 dark:text-blue-300 leading-relaxed">
               All your data is stored locally on your device. No internet connection is required, and your information is never sent to any server.
             </p>
           </div>
           
           <div className="text-center mt-6">
-            <p className="text-xs text-gray-500">ChainReact v1.0.0</p>
-            <p className="text-xs text-gray-400 mt-1">Build momentum. One habit at a time.</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 flex items-center justify-center gap-1">
+              ChainReact v1.0.0
+              <Badge className="bg-blue-500 text-white text-[10px] h-4">Beta</Badge>
+            </p>
+            <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">Build momentum. One habit at a time.</p>
           </div>
         </Card>
       </main>

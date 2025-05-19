@@ -2,24 +2,16 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Info, Mail, Github, Globe } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { Badge } from '@/components/ui/badge';
 
 const AppVersionInfo = () => {
   const navigate = useNavigate();
   
-  // App version information
-  const appInfo = {
-    name: "ChainReact",
-    version: "1.0.0",
-    buildDate: "May 19, 2025",
-    buildNumber: "10025",
-    developer: "Vaion",
-    contact: "vaiondevelopers@gmail.com",
-    website: "https://chainreact.app",
-    github: "https://github.com/vaion/chainreact",
-    copyright: "© 2025 Vaion. All rights reserved."
-  };
+  const appVersion = "1.0.0";
+  const buildNumber = "1001";
+  const buildDate = "May 19, 2025";
 
   return (
     <div className="container mx-auto px-4 py-6">
@@ -32,78 +24,60 @@ const AppVersionInfo = () => {
         >
           <ArrowLeft size={16} />
         </Button>
-        <h2 className="text-xl font-bold text-gray-800">App Information</h2>
+        <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">App Info</h2>
       </div>
 
       <Card className="mb-6">
-        <CardContent className="p-5">
-          <div className="flex flex-col items-center mb-6">
-            <div className="w-16 h-16 rounded-xl bg-blue-600 flex items-center justify-center mb-3">
-              <span className="text-xl font-bold text-white">CR</span>
+        <CardContent className="p-6">
+          <div className="flex flex-col items-center justify-center mb-6">
+            <h1 className="text-2xl font-bold mb-1">ChainReact</h1>
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-gray-500 dark:text-gray-400">Version {appVersion}</span>
+              <Badge className="bg-blue-500 text-white">Beta</Badge>
             </div>
-            <h1 className="text-xl font-bold text-gray-800">{appInfo.name}</h1>
-            <p className="text-sm text-gray-600">Build momentum. One habit at a time.</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">Build {buildNumber} ({buildDate})</p>
           </div>
-          
+
           <div className="space-y-4">
-            <div className="bg-gray-50 p-3 rounded-lg">
-              <h3 className="text-sm font-medium text-gray-700 mb-2">Version Information</h3>
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-xs text-gray-500">Version</span>
-                  <span className="text-xs font-medium text-gray-700">{appInfo.version}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-xs text-gray-500">Build date</span>
-                  <span className="text-xs font-medium text-gray-700">{appInfo.buildDate}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-xs text-gray-500">Build number</span>
-                  <span className="text-xs font-medium text-gray-700">{appInfo.buildNumber}</span>
-                </div>
-              </div>
+            <div className="border-t border-gray-100 dark:border-gray-800 pt-4">
+              <h3 className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-1">Description</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                ChainReact is a minimalist, gamified habit tracker designed to help you build and maintain powerful habit chains.
+              </p>
             </div>
-            
-            <div className="bg-gray-50 p-3 rounded-lg">
-              <h3 className="text-sm font-medium text-gray-700 mb-2">Developer Information</h3>
-              <div className="space-y-3">
-                <div className="flex justify-between items-center">
-                  <span className="text-xs text-gray-500">Developer</span>
-                  <span className="text-xs font-medium text-gray-700">{appInfo.developer}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-xs text-gray-500">Contact</span>
-                  <a href={`mailto:${appInfo.contact}`} className="text-xs font-medium text-blue-600 flex items-center">
-                    <Mail size={12} className="mr-1" />
-                    {appInfo.contact}
-                  </a>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-xs text-gray-500">Website</span>
-                  <a href={appInfo.website} className="text-xs font-medium text-blue-600 flex items-center">
-                    <Globe size={12} className="mr-1" />
-                    chainreact.app
-                  </a>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-xs text-gray-500">GitHub</span>
-                  <a href={appInfo.github} className="text-xs font-medium text-blue-600 flex items-center">
-                    <Github size={12} className="mr-1" />
-                    vaion/chainreact
-                  </a>
-                </div>
-              </div>
+
+            <div className="border-t border-gray-100 dark:border-gray-800 pt-4">
+              <h3 className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-1">Developer</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                ChainReact Team
+              </p>
             </div>
-          </div>
-          
-          <div className="mt-6 pt-3 border-t border-gray-100 flex justify-center">
-            <div className="flex items-center text-xs text-gray-500">
-              <Info size={12} className="mr-1" />
-              <span>{appInfo.copyright}</span>
+
+            <div className="border-t border-gray-100 dark:border-gray-800 pt-4">
+              <h3 className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-1">Website</h3>
+              <p className="text-sm text-blue-600 dark:text-blue-400">
+                chainreact.app
+              </p>
+            </div>
+
+            <div className="border-t border-gray-100 dark:border-gray-800 pt-4">
+              <h3 className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-1">Support</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                support@chainreact.app
+              </p>
             </div>
           </div>
         </CardContent>
       </Card>
+
+      <div className="text-center">
+        <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
+          Made with ❤️ for habit builders everywhere
+        </p>
+        <p className="text-xs text-gray-400 dark:text-gray-500">
+          Copyright © 2025 ChainReact Team
+        </p>
+      </div>
     </div>
   );
 };

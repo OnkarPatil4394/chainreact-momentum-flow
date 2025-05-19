@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -93,9 +94,14 @@
 @layer base {
   * {
     @apply border-border;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
   }
 
   body {
     @apply bg-background text-foreground;
+  }
+  
+  .toast-container {
+    @apply dark:bg-gray-800 dark:text-white;
   }
 }

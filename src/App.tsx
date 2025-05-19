@@ -18,7 +18,6 @@ import PrivacyPolicy from "./components/legal/PrivacyPolicy";
 import TermsOfUse from "./components/legal/TermsOfUse";
 import Permissions from "./components/legal/Permissions";
 import OpenSourceLicenses from "./components/legal/OpenSourceLicenses";
-import Changelog from "./components/legal/Changelog";
 import AppVersionInfo from "./components/legal/AppVersionInfo";
 import AboutPage from "./components/legal/AboutPage";
 
@@ -42,6 +41,8 @@ const App = () => {
     const settings = db.getSettings();
     if (settings.darkMode) {
       document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
     }
     
     // Check if this is the first time opening the app
@@ -67,7 +68,10 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
-        <Sonner />
+        <Sonner 
+          className="dark:bg-gray-800 dark:text-white"
+          toastOptions={{ duration: 3000 }} // Set duration to 3 seconds
+        />
         
         {isLoading ? (
           <LoadingScreen onFinished={handleLoadingFinished} />
@@ -83,7 +87,6 @@ const App = () => {
               <Route path="/terms-of-use" element={<TermsOfUse />} />
               <Route path="/permissions" element={<Permissions />} />
               <Route path="/opensource-licenses" element={<OpenSourceLicenses />} />
-              <Route path="/changelog" element={<Changelog />} />
               <Route path="/app-info" element={<AppVersionInfo />} />
               <Route path="/about" element={<AboutPage />} />
               

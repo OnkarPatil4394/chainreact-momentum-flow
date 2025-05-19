@@ -13,6 +13,7 @@ import { Plus } from 'lucide-react';
 const Index = () => {
   const [chains, setChains] = useState<HabitChainType[]>([]);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [editingChain, setEditingChain] = useState<HabitChainType | undefined>(undefined);
   
   // Load chains from database
   const loadChains = () => {
@@ -24,11 +25,18 @@ const Index = () => {
   }, []);
   
   const handleOpenCreateModal = () => {
+    setEditingChain(undefined);
+    setIsCreateModalOpen(true);
+  };
+  
+  const handleOpenEditModal = (chain: HabitChainType) => {
+    setEditingChain(chain);
     setIsCreateModalOpen(true);
   };
   
   const handleCloseCreateModal = () => {
     setIsCreateModalOpen(false);
+    setEditingChain(undefined);
     loadChains(); // Refresh chains after modal is closed
   };
   
@@ -44,14 +52,14 @@ const Index = () => {
   });
   
   return (
-    <div className="min-h-screen bg-gray-50 pb-16">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pb-16">
       <Header />
       
       <main className="container mx-auto px-4 py-6">
         {/* Today's date */}
         <div className="mb-4">
-          <h2 className="text-xl font-bold text-gray-800">{currentDate}</h2>
-          <p className="text-sm text-gray-600">Your daily habit chains</p>
+          <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">{currentDate}</h2>
+          <p className="text-sm text-gray-600 dark:text-gray-400">Your daily habit chains</p>
         </div>
         
         {/* How to use section */}
@@ -77,25 +85,27 @@ const Index = () => {
             {chains.map(chain => (
               <HabitChain 
                 key={chain.id} 
-                chain={chain} 
+                chain={chain}
+                onEdit={() => handleOpenEditModal(chain)} 
                 onUpdate={handleChainUpdate}
               />
             ))}
           </div>
         ) : (
           <div className="text-center py-12">
-            <p className="text-gray-500 mb-4">No habit chains created yet.</p>
-            <p className="text-gray-400 text-sm">
+            <p className="text-gray-500 dark:text-gray-400 mb-4">No habit chains created yet.</p>
+            <p className="text-gray-400 dark:text-gray-500 text-sm">
               Create your first chain to start building momentum!
             </p>
           </div>
         )}
       </main>
       
-      {/* Create habit modal */}
+      {/* Create/Edit habit modal */}
       <CreateHabitModal 
         open={isCreateModalOpen} 
-        onClose={handleCloseCreateModal} 
+        onClose={handleCloseCreateModal}
+        editingChain={editingChain} 
       />
     </div>
   );
