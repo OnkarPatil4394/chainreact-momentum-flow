@@ -9,7 +9,22 @@ import { Card } from '@/components/ui/card';
 import { db } from '../db/database';
 import { AppSettings } from '../types/types';
 import { toast } from '@/hooks/use-toast';
-import { Save, Download, Upload, Trash, AlertCircle } from 'lucide-react';
+import { 
+  Save, 
+  Download, 
+  Upload, 
+  Trash, 
+  AlertCircle, 
+  ChevronRight,
+  FileText,
+  Shield,
+  Info,
+  Code2,
+  Clock,
+  HelpCircle,
+  Bell
+} from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Settings = () => {
   const [settings, setSettings] = useState<AppSettings>(db.getSettings());
@@ -139,6 +154,24 @@ const Settings = () => {
     }
   };
   
+  // Link component for settings items
+  const SettingsLink = ({ to, icon, title, description }: { to: string, icon: React.ReactNode, title: string, description: string }) => (
+    <Link to={to}>
+      <div className="flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg transition-colors">
+        <div className="flex items-start">
+          <div className="h-8 w-8 flex items-center justify-center text-gray-600 mr-3">
+            {icon}
+          </div>
+          <div>
+            <h3 className="text-base font-medium text-gray-800">{title}</h3>
+            <p className="text-xs text-gray-500 mt-0.5">{description}</p>
+          </div>
+        </div>
+        <ChevronRight size={18} className="text-gray-400" />
+      </div>
+    </Link>
+  );
+  
   return (
     <div className="min-h-screen bg-gray-50 pb-16">
       <Header />
@@ -253,6 +286,58 @@ const Settings = () => {
                 </Button>
               </div>
             </div>
+          </div>
+        </Card>
+        
+        {/* Permissions */}
+        <Card className="mb-6">
+          <SettingsLink 
+            to="/permissions"
+            icon={<Shield size={20} />}
+            title="Permissions"
+            description="Manage app permissions and privacy settings"
+          />
+        </Card>
+        
+        {/* Legal & Info */}
+        <Card className="mb-6">
+          <h3 className="text-base font-medium text-gray-800 px-4 pt-4 pb-2">Legal & Info</h3>
+          
+          <div className="border-t border-gray-100">
+            <SettingsLink 
+              to="/privacy-policy"
+              icon={<FileText size={20} />}
+              title="Privacy Policy"
+              description="How we handle your data and privacy"
+            />
+            
+            <SettingsLink 
+              to="/terms-of-use"
+              icon={<FileText size={20} />}
+              title="Terms of Use"
+              description="Terms and conditions for using ChainReact"
+            />
+            
+            <SettingsLink 
+              to="/opensource-licenses"
+              icon={<Code2 size={20} />}
+              title="Open Source Credits"
+              description="Acknowledgments for libraries and tools used"
+            />
+            
+            <SettingsLink 
+              to="/changelog"
+              icon={<Clock size={20} />}
+              title="Changelog"
+              description="See what's new in each version"
+            />
+            
+            <SettingsLink 
+              to="/app-info"
+              icon={<Info size={20} />}
+              title="App Version & Info"
+              description="Version number and developer information"
+            />
           </div>
         </Card>
         
