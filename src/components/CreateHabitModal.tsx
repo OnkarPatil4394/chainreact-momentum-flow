@@ -140,7 +140,7 @@ const CreateHabitModal: React.FC<CreateHabitModalProps> = ({ open, onClose, edit
         <div className="fixed inset-0 bg-black/20 dark:bg-black/50" onClick={onClose}></div>
         <div className="w-full max-w-md mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden z-10 flex flex-col max-h-[90vh]">
           {/* Fixed header */}
-          <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-gray-700">
+          <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800 sticky top-0 z-10">
             <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
               {editingChain ? 'Edit Habit Chain' : 'Create Habit Chain'}
             </h2>
@@ -153,8 +153,8 @@ const CreateHabitModal: React.FC<CreateHabitModalProps> = ({ open, onClose, edit
           </div>
           
           <form onSubmit={handleSubmit} className="flex flex-col h-full">
-            <div className="p-4 space-y-4 flex-shrink-0">
-              {/* Chain details */}
+            {/* Chain details section - fixed position */}
+            <div className="p-4 space-y-4 flex-shrink-0 bg-white dark:bg-gray-800 sticky top-[65px] z-[5]">
               <div className="flex items-end gap-2">
                 <div className="space-y-2 flex-1">
                   <label htmlFor="chainName" className="text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -199,62 +199,62 @@ const CreateHabitModal: React.FC<CreateHabitModalProps> = ({ open, onClose, edit
             </div>
             
             {/* Scrollable habits section */}
-            <div className="flex-1 overflow-hidden">
-              <ScrollArea className="h-full px-4">
-                <div className="space-y-4 pb-4">
-                  <div className="flex justify-between items-center">
-                    <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">Habits</h3>
-                    <span className="text-xs text-gray-500 dark:text-gray-400">Will unlock in sequence</span>
-                  </div>
-                  
-                  {habits.map((habit, index) => (
-                    <div key={habit.id} className="p-3 border border-gray-200 dark:border-gray-700 rounded-md space-y-3">
-                      <div className="flex justify-between items-center">
-                        <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs font-medium">
-                          {index + 1}
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveHabit(habit.id)}
-                          disabled={habits.length <= 1}
-                          className={`text-red-500 ${habits.length <= 1 ? 'opacity-30' : 'hover:text-red-700 dark:hover:text-red-400'}`}
-                        >
-                          <Trash size={16} />
-                        </button>
-                      </div>
-                      
-                      <Input 
-                        value={habit.name}
-                        onChange={e => handleHabitChange(habit.id, 'name', e.target.value)}
-                        placeholder="Habit name"
-                        required
-                        className="dark:bg-gray-700 dark:border-gray-600"
-                      />
-                      
-                      <Input
-                        value={habit.description}
-                        onChange={e => handleHabitChange(habit.id, 'description', e.target.value)}
-                        placeholder="Short description (optional)"
-                        className="dark:bg-gray-700 dark:border-gray-600"
-                      />
-                    </div>
-                  ))}
-                  
-                  <Button 
-                    type="button"
-                    onClick={handleAddHabit}
-                    variant="outline"
-                    className="w-full flex items-center justify-center text-blue-600 dark:text-blue-400 border-dashed border-blue-200 dark:border-blue-800 hover:border-blue-400 dark:hover:border-blue-600"
-                  >
-                    <Plus size={16} className="mr-1" />
-                    Add Habit
-                  </Button>
+            <div className="flex-1 overflow-auto px-4 pb-4 min-h-[100px] max-h-[40vh]">
+              <div className="sticky top-0 py-2 bg-white dark:bg-gray-800 z-[4] border-b border-gray-100 dark:border-gray-700">
+                <div className="flex justify-between items-center">
+                  <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">Habits</h3>
+                  <span className="text-xs text-gray-500 dark:text-gray-400">Will unlock in sequence</span>
                 </div>
-              </ScrollArea>
+              </div>
+              
+              <div className="space-y-4 pt-3">
+                {habits.map((habit, index) => (
+                  <div key={habit.id} className="p-3 border border-gray-200 dark:border-gray-700 rounded-md space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs font-medium">
+                        {index + 1}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveHabit(habit.id)}
+                        disabled={habits.length <= 1}
+                        className={`text-red-500 ${habits.length <= 1 ? 'opacity-30' : 'hover:text-red-700 dark:hover:text-red-400'}`}
+                      >
+                        <Trash size={16} />
+                      </button>
+                    </div>
+                    
+                    <Input 
+                      value={habit.name}
+                      onChange={e => handleHabitChange(habit.id, 'name', e.target.value)}
+                      placeholder="Habit name"
+                      required
+                      className="dark:bg-gray-700 dark:border-gray-600"
+                    />
+                    
+                    <Input
+                      value={habit.description}
+                      onChange={e => handleHabitChange(habit.id, 'description', e.target.value)}
+                      placeholder="Short description (optional)"
+                      className="dark:bg-gray-700 dark:border-gray-600"
+                    />
+                  </div>
+                ))}
+                
+                <Button 
+                  type="button"
+                  onClick={handleAddHabit}
+                  variant="outline"
+                  className="w-full flex items-center justify-center text-blue-600 dark:text-blue-400 border-dashed border-blue-200 dark:border-blue-800 hover:border-blue-400 dark:hover:border-blue-600"
+                >
+                  <Plus size={16} className="mr-1" />
+                  Add Habit
+                </Button>
+              </div>
             </div>
             
             {/* Fixed footer with action buttons */}
-            <div className="flex space-x-3 p-4 border-t border-gray-100 dark:border-gray-700 flex-shrink-0">
+            <div className="flex space-x-3 p-4 border-t border-gray-100 dark:border-gray-700 flex-shrink-0 bg-white dark:bg-gray-800 sticky bottom-0 z-10">
               <Button 
                 type="button"
                 variant="outline"
