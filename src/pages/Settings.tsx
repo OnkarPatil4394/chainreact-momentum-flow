@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge'; // Add Badge import
 import { db } from '../db/database';
 import { AppSettings } from '../types/types';
 import { toast } from '@/hooks/use-toast';

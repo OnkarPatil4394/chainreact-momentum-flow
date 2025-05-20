@@ -7,9 +7,10 @@ import { db } from '../db/database';
 interface HabitChainProps {
   chain: HabitChainType;
   onUpdate: () => void;
+  onEdit?: () => void; // Make onEdit optional
 }
 
-const HabitChain: React.FC<HabitChainProps> = ({ chain, onUpdate }) => {
+const HabitChain: React.FC<HabitChainProps> = ({ chain, onUpdate, onEdit }) => {
   const handleCompleteHabit = (habitId: string) => {
     const success = db.completeHabit(chain.id, habitId);
     if (success) {
