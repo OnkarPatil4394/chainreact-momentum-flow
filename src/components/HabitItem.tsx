@@ -2,7 +2,6 @@
 import React from 'react';
 import { Habit } from '../types/types';
 import { Check, ArrowDown } from 'lucide-react';
-import { playCompletionSound, playXpSound } from '../utils/sounds'; // Import sound utilities
 
 interface HabitItemProps {
   habit: Habit;
@@ -13,14 +12,6 @@ interface HabitItemProps {
 const HabitItem: React.FC<HabitItemProps> = ({ habit, isLocked, onComplete }) => {
   const handleComplete = () => {
     if (!isLocked && !habit.completed) {
-      // Play completion sound when habit is completed
-      playCompletionSound();
-      
-      // Add slight delay before showing XP increase
-      setTimeout(() => {
-        playXpSound();
-      }, 800);
-      
       onComplete(habit.id);
     }
   };

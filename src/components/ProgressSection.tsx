@@ -4,28 +4,19 @@ import { Trophy } from 'lucide-react';
 import { db } from '../db/database';
 import { UserStats } from '../types/types';
 import { Progress } from '@/components/ui/progress';
-import { playXpSound } from '../utils/sounds';
 
 const ProgressSection: React.FC = () => {
   const [stats, setStats] = React.useState<UserStats>(db.getStats());
-  const [prevXp, setPrevXp] = React.useState<number>(stats.totalXp);
 
   React.useEffect(() => {
     // Update stats when they change
     const interval = setInterval(() => {
       const newStats = db.getStats();
-      
-      // Play sound if XP increased
-      if (newStats.totalXp > prevXp) {
-        playXpSound();
-        setPrevXp(newStats.totalXp);
-      }
-      
       setStats(newStats);
     }, 1000);
     
     return () => clearInterval(interval);
-  }, [prevXp]);
+  }, []);
 
   // Calculate XP progress to the next level
   const xpForCurrentLevel = (stats.level - 1) * 100;
@@ -61,7 +52,7 @@ const ProgressSection: React.FC = () => {
           <span>{contributionPerChain.toFixed(1)}% per chain</span>
         </div>
         <div className="flex gap-1 overflow-x-auto pb-1">
-          {chains.map((chain, index) => (
+          {chains.map((chain) => (
             <div 
               key={chain.id}
               className="flex-shrink-0 h-1.5 rounded-full transition-all" 
