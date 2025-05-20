@@ -6,6 +6,7 @@ import HowToUse from '../components/HowToUse';
 import { db } from '../db/database';
 import { UserStats, HabitChain } from '../types/types';
 import { Trophy, Calendar, Star, CheckCheck, Trash2 } from 'lucide-react';
+import { playSettingsSound } from '../utils/sounds'; // Import the sound utility
 import { 
   AlertDialog,
   AlertDialogAction,
@@ -61,6 +62,10 @@ const Stats = () => {
     db.deleteChain(chainId);
     setChains(db.getChains());
     setStats(db.getStats());
+    
+    // Play settings sound on delete
+    playSettingsSound();
+    
     toast({
       title: "Chain deleted",
       description: "The habit chain has been successfully deleted",

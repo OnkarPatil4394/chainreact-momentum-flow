@@ -6,10 +6,11 @@ import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge'; // Add Badge import
+import { Badge } from '@/components/ui/badge'; // Fixed Badge import
 import { db } from '../db/database';
 import { AppSettings } from '../types/types';
-import { toast } from '@/hooks/use-toast';
+import { useToast } from "@/hooks/use-toast";
+import { playSettingsSound } from '../utils/sounds'; // Import the sound utility
 import { 
   Save, 
   Download, 
@@ -28,6 +29,7 @@ import { Link } from 'react-router-dom';
 
 const Settings = () => {
   const [settings, setSettings] = useState<AppSettings>(db.getSettings());
+  const { toast } = useToast();
   
   useEffect(() => {
     setSettings(db.getSettings());
@@ -47,6 +49,9 @@ const Settings = () => {
     };
     setSettings(updatedSettings);
     db.saveSettings(updatedSettings);
+    
+    // Play settings sound
+    playSettingsSound();
     
     toast({
       title: updatedSettings.notificationsEnabled ? 'Notifications enabled' : 'Notifications disabled',
@@ -72,6 +77,9 @@ const Settings = () => {
       document.documentElement.classList.remove('dark');
     }
     
+    // Play settings sound
+    playSettingsSound();
+    
     toast({
       title: updatedSettings.darkMode ? 'Dark mode enabled' : 'Light mode enabled',
       duration: 3000,
@@ -85,6 +93,9 @@ const Settings = () => {
     };
     setSettings(updatedSettings);
     db.saveSettings(updatedSettings);
+    
+    // Play settings sound for significant changes
+    playSettingsSound();
   };
   
   const handleExportData = () => {
@@ -99,6 +110,9 @@ const Settings = () => {
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
+      
+      // Play settings sound
+      playSettingsSound();
       
       toast({
         title: 'Data exported successfully',
@@ -138,6 +152,9 @@ const Settings = () => {
             document.documentElement.classList.remove('dark');
           }
           
+          // Play settings sound
+          playSettingsSound();
+          
           toast({
             title: 'Data imported successfully',
             description: 'Your habits and progress have been restored',
@@ -174,6 +191,9 @@ const Settings = () => {
       
       // Reset to default settings
       setSettings(db.getSettings());
+      
+      // Play settings sound
+      playSettingsSound();
       
       toast({
         title: 'Data reset complete',

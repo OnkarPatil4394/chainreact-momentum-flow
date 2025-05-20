@@ -11,7 +11,9 @@ import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import LoadingScreen from "./components/LoadingScreen";
 import WelcomeScreen from "./components/WelcomeScreen";
+import StreakCelebration from "./components/StreakCelebration"; // Import streak celebration component
 import { db } from "./db/database";
+import { playStreakSound } from "./utils/sounds"; // Import sound utility
 
 // Legal & Info pages
 import PrivacyPolicy from "./components/legal/PrivacyPolicy";
@@ -26,6 +28,8 @@ const queryClient = new QueryClient();
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [showWelcome, setShowWelcome] = useState(false);
+  const [showStreakCelebration, setShowStreakCelebration] = useState(false);
+  const [streakDays, setStreakDays] = useState(0);
 
   useEffect(() => {
     // Add custom font to document head
@@ -49,8 +53,27 @@ const App = () => {
     const isFirstTime = db.isFirstTimeUser();
     if (isFirstTime) {
       setShowWelcome(true);
+    } else {
+      // Check for streak celebration
+      checkForStreakCelebration();
     }
   }, []);
+
+  // Function to check if we should show streak celebration
+  const checkForStreakCelebration = () => {
+    const stats = db.getStats();
+    const lastVisitDate = localStorage.getItem('lastVisitDate');
+    const today = new Date().toISOString().split('T')[0];
+    
+    // Check if it's a new day since last visit
+    if (lastVisitDate && lastVisitDate !== today && stats.streakDays > 0) {
+      setStreakDays(stats.streakDays);
+      setShowStreakCelebration(true);
+    }
+    
+    // Update last visit date
+    localStorage.setItem('lastVisitDate', today);
+  };
 
   const handleLoadingFinished = () => {
     setIsLoading(false);
@@ -58,10 +81,20 @@ const App = () => {
   
   const handleWelcomeComplete = () => {
     setShowWelcome(false);
+    // Check streak after welcome screen closes
+    checkForStreakCelebration();
+  };
+  
+  const handleStreakCelebrationClose = () => {
+    setShowStreakCelebration(false);
   };
 
   if (showWelcome) {
     return <WelcomeScreen onComplete={handleWelcomeComplete} />;
+  }
+  
+  if (showStreakCelebration) {
+    return <StreakCelebration streakDays={streakDays} onClose={handleStreakCelebrationClose} />;
   }
 
   return (
