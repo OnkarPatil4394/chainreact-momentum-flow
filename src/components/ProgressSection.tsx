@@ -3,24 +3,40 @@ import React from 'react';
 import { Trophy } from 'lucide-react';
 import { db } from '../db/database';
 import { UserStats } from '../types/types';
+import { Progress } from '@/components/ui/progress';
+import { playXpSound } from '../utils/sounds';
 
 const ProgressSection: React.FC = () => {
   const [stats, setStats] = React.useState<UserStats>(db.getStats());
+  const [prevXp, setPrevXp] = React.useState<number>(stats.totalXp);
 
   React.useEffect(() => {
     // Update stats when they change
     const interval = setInterval(() => {
-      setStats(db.getStats());
+      const newStats = db.getStats();
+      
+      // Play sound if XP increased
+      if (newStats.totalXp > prevXp) {
+        playXpSound();
+        setPrevXp(newStats.totalXp);
+      }
+      
+      setStats(newStats);
     }, 1000);
     
     return () => clearInterval(interval);
-  }, []);
+  }, [prevXp]);
 
   // Calculate XP progress to the next level
   const xpForCurrentLevel = (stats.level - 1) * 100;
   const xpForNextLevel = stats.level * 100;
   const currentLevelProgress = stats.totalXp - xpForCurrentLevel;
   const progressPercentage = (currentLevelProgress / 100) * 100;
+  
+  // Get all chains to calculate contribution
+  const chains = db.getChains();
+  const totalChains = chains.length;
+  const contributionPerChain = totalChains > 0 ? 100 / totalChains : 100;
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 mb-6">
@@ -35,11 +51,33 @@ const ProgressSection: React.FC = () => {
           <span>Level {stats.level}</span>
           <span>{currentLevelProgress}/100 XP to level {stats.level + 1}</span>
         </div>
-        <div className="h-2 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
-          <div 
-            className="h-full bg-blue-500 dark:bg-blue-600 transition-all duration-300 ease-in-out" 
-            style={{ width: `${progressPercentage}%` }}
-          />
+        <Progress value={progressPercentage} className="h-2" />
+      </div>
+      
+      {/* Chain contribution info */}
+      <div className="mb-4">
+        <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-1">
+          <span>Chain Contribution</span>
+          <span>{contributionPerChain.toFixed(1)}% per chain</span>
+        </div>
+        <div className="flex gap-1 overflow-x-auto pb-1">
+          {chains.map((chain, index) => (
+            <div 
+              key={chain.id}
+              className="flex-shrink-0 h-1.5 rounded-full transition-all" 
+              style={{ 
+                width: `${contributionPerChain}%`, 
+                backgroundColor: chain.habits.some(h => h.completed) 
+                  ? 'rgb(59, 130, 246)' // blue-500
+                  : 'rgb(229, 231, 235)' // gray-200 
+              }}
+              title={chain.name}
+            />
+          ))}
+          
+          {chains.length === 0 && (
+            <div className="w-full h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full" />
+          )}
         </div>
       </div>
       
