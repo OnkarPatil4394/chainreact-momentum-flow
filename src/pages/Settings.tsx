@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import { Button } from '@/components/ui/button';
@@ -23,6 +22,7 @@ import {
   Info,
   Code2,
   HelpCircle,
+  Coffee,
   Bell
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -381,6 +381,27 @@ const Settings = () => {
               description="Version number and developer information"
             />
           </div>
+        </Card>
+        
+        {/* Buy Me a Coffee */}
+        <Card className="mb-6 dark:bg-gray-800 dark:border-gray-700">
+          <a 
+            href="https://buymeacoffee.com/patilonkar" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors"
+          >
+            <div className="flex items-start">
+              <div className="h-8 w-8 flex items-center justify-center text-amber-500 dark:text-amber-400 mr-3">
+                <Coffee size={20} />
+              </div>
+              <div>
+                <h3 className="text-base font-medium text-gray-800 dark:text-gray-200">Buy Me a Coffee</h3>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Support the development of ChainReact</p>
+              </div>
+            </div>
+            <ChevronRight size={18} className="text-gray-400 dark:text-gray-500" />
+          </a>
         </Card>
         
         {/* About */}
