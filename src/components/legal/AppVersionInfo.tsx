@@ -49,21 +49,14 @@ const AppVersionInfo = () => {
             <div className="border-t border-gray-100 dark:border-gray-800 pt-4">
               <h3 className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-1">Developer</h3>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                ChainReact Team
-              </p>
-            </div>
-
-            <div className="border-t border-gray-100 dark:border-gray-800 pt-4">
-              <h3 className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-1">Website</h3>
-              <p className="text-sm text-blue-600 dark:text-blue-400">
-                chainreact.app
+                Vaion Developers
               </p>
             </div>
 
             <div className="border-t border-gray-100 dark:border-gray-800 pt-4">
               <h3 className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-1">Support</h3>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                support@chainreact.app
+                vaiondevelopers@gmail.com
               </p>
             </div>
           </div>
