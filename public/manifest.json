@@ -120,7 +120,15 @@
           }
         },
         "type": "json"
-      }
+      },
+      "screenshots": [
+        {
+          "src": "/screenshots/screenshot1.png",
+          "sizes": "1280x720",
+          "type": "image/png",
+          "label": "Daily Habits Widget"
+        }
+      ]
     }
   ],
   "categories": ["productivity", "lifestyle", "utilities"],
