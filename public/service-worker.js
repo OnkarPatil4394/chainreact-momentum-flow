@@ -1,6 +1,6 @@
 
 // Cache name with version
-const CACHE_NAME = 'chainreact-cache-v1';
+const CACHE_NAME = 'chainreact-cache-v2';
 
 // Files to cache
 const urlsToCache = [
