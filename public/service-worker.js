@@ -1,4 +1,3 @@
-
 // Cache name with version
 const CACHE_NAME = 'chainreact-cache-v1';
 
@@ -23,6 +22,8 @@ self.addEventListener('install', (event) => {
         return cache.addAll(urlsToCache);
       })
   );
+  // Skip waiting to activate immediately
+  self.skipWaiting();
 });
 
 // Cache and return requests
@@ -71,6 +72,8 @@ self.addEventListener('activate', (event) => {
       );
     })
   );
+  // Claim clients to control all open tabs
+  self.clients.claim();
 });
 
 // Background Sync

@@ -45,39 +45,9 @@
   "dir": "ltr",
   "lang": "en",
   "scope": "/",
-  "scope_extensions": [
-    {
-      "origin": "https://chainreact.app"
-    }
-  ],
-  "display_override": ["window-controls-overlay"],
-  "edge_side_panel": {
-    "preferred_width": 400
-  },
-  "file_handlers": [
-    {
-      "action": "/",
-      "accept": {
-        "application/json": [".chain"]
-      }
-    }
-  ],
-  "handle_links": "preferred",
-  "protocol_handlers": [
-    {
-      "protocol": "web+chainreact",
-      "url": "/?habit=%s"
-    }
-  ],
-  "share_target": {
-    "action": "/share-target/",
-    "method": "GET",
-    "params": {
-      "title": "title",
-      "text": "text",
-      "url": "url"
-    }
-  },
+  "categories": ["productivity", "lifestyle", "utilities"],
+  "prefer_related_applications": false,
+  "related_applications": [],
   "shortcuts": [
     {
       "name": "Add New Habit",
@@ -105,33 +75,5 @@
         }
       ]
     }
-  ],
-  "widgets": [
-    {
-      "name": "Daily Habits",
-      "description": "Shows your habits for today",
-      "tag": "daily-habits",
-      "msAcrylic": true,
-      "data": {
-        "templates": {
-          "widget": {
-            "path": "/widgets/daily-habits.json",
-            "maxWidth": 400
-          }
-        },
-        "type": "json"
-      },
-      "screenshots": [
-        {
-          "src": "/screenshots/screenshot1.png",
-          "sizes": "1280x720",
-          "type": "image/png",
-          "label": "Daily Habits Widget"
-        }
-      ]
-    }
-  ],
-  "categories": ["productivity", "lifestyle", "utilities"],
-  "prefer_related_applications": false,
-  "related_applications": []
+  ]
 }
