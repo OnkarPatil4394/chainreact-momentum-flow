@@ -1,3 +1,4 @@
+
 // Cache name with version
 const CACHE_NAME = 'chainreact-cache-v1';
 
