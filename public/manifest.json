@@ -13,21 +13,60 @@
   "launch_handler": {
     "client_mode": ["navigate-existing", "auto"]
   },
+  "share_target": {
+    "action": "/share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  },
+  "widgets": [
+    {
+      "name": "Quick Add Habit",
+      "description": "Quickly add a new habit completion",
+      "tag": "quick-add",
+      "template": "quick-add-widget",
+      "ms_ac_template": "quick-add-adaptive-card.json",
+      "data": "/widgets/quick-add-data.json",
+      "type": "application/json",
+      "screenshots": [
+        {
+          "src": "/screenshots/widget-screenshot.png",
+          "sizes": "600x400",
+          "label": "Quick Add Widget"
+        }
+      ],
+      "icons": [
+        {
+          "src": "/icons/icon-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "scope_extensions": [
+    {
+      "origin": "https://b32626aa-f522-4b29-97f5-9c8342dadcb5.lovableproject.com"
+    }
+  ],
   "icons": [
     {
-      "src": "icons/icon-192x192.png",
+      "src": "/icons/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "icons/icon-512x512.png",
+      "src": "/icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "icons/maskable-icon-512x512.png",
+      "src": "/icons/maskable-icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
@@ -35,7 +74,7 @@
   ],
   "screenshots": [
     {
-      "src": "screenshots/screenshot1.png",
+      "src": "/screenshots/screenshot1.png",
       "sizes": "1280x720",
       "type": "image/png",
       "platform": "wide",
@@ -56,7 +95,7 @@
       "url": "/?new=true",
       "icons": [
         {
-          "src": "icons/icon-192x192.png",
+          "src": "/icons/icon-192x192.png",
           "sizes": "192x192",
           "type": "image/png"
         }
@@ -69,7 +108,7 @@
       "url": "/stats",
       "icons": [
         {
-          "src": "icons/icon-192x192.png",
+          "src": "/icons/icon-192x192.png",
           "sizes": "192x192",
           "type": "image/png"
         }
