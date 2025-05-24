@@ -1,6 +1,6 @@
 
 // Cache name with version
-const CACHE_NAME = 'chainreact-cache-v2';
+const CACHE_NAME = 'chainreact-cache-v3';
 
 // Files to cache
 const urlsToCache = [
@@ -75,6 +75,21 @@ self.addEventListener('activate', (event) => {
   );
   // Claim clients to control all open tabs
   self.clients.claim();
+});
+
+// Handle file imports
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'IMPORT_FILE') {
+    // Handle file import data
+    const fileData = event.data.payload;
+    console.log('File import received:', fileData);
+    
+    // Store the import data temporarily
+    self.registration.postMessage({
+      type: 'FILE_IMPORTED',
+      data: fileData
+    });
+  }
 });
 
 // Background Sync

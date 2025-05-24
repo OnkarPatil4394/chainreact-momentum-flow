@@ -28,9 +28,44 @@
     
     <!-- Additional Apple splash screen icons -->
     <link rel="apple-touch-startup-image" href="/icons/icon-512x512.png" />
+    
+    <!-- Window Controls Overlay CSS -->
+    <style>
+      @media (display-mode: window-controls-overlay) {
+        body {
+          padding-top: env(titlebar-area-height, 40px);
+        }
+        
+        .titlebar-area {
+          position: fixed;
+          top: 0;
+          left: env(titlebar-area-x, 0);
+          width: env(titlebar-area-width, 100%);
+          height: env(titlebar-area-height, 40px);
+          background: var(--theme-color, #000000);
+          display: flex;
+          align-items: center;
+          padding: 0 16px;
+          z-index: 1000;
+          app-region: drag;
+        }
+        
+        .titlebar-area .app-title {
+          color: white;
+          font-weight: 600;
+          font-size: 14px;
+          app-region: no-drag;
+        }
+      }
+    </style>
   </head>
 
   <body>
+    <!-- Titlebar for window controls overlay -->
+    <div class="titlebar-area">
+      <span class="app-title">ChainReact</span>
+    </div>
+    
     <div id="root"></div>
     <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
@@ -47,6 +82,41 @@
               console.log('ServiceWorker registration failed: ', error);
             });
         });
+      }
+      
+      // Handle file imports
+      if ('launchQueue' in window) {
+        window.launchQueue.setConsumer((launchParams) => {
+          if (launchParams.files && launchParams.files.length) {
+            launchParams.files.forEach(async (fileHandle) => {
+              const file = await fileHandle.getFile();
+              const content = await file.text();
+              
+              // Send to service worker or handle directly
+              navigator.serviceWorker.controller?.postMessage({
+                type: 'IMPORT_FILE',
+                payload: {
+                  name: file.name,
+                  content: content,
+                  type: file.type
+                }
+              });
+            });
+          }
+        });
+      }
+      
+      // Handle protocol links
+      if ('URLPattern' in window) {
+        const pattern = new URLPattern({ pathname: '/habit' });
+        if (pattern.test(window.location)) {
+          const params = new URLSearchParams(window.location.search);
+          const data = params.get('data');
+          if (data) {
+            console.log('Protocol handler data:', data);
+            // Handle the protocol data here
+          }
+        }
       }
     </script>
   </body>
