@@ -105,29 +105,58 @@
         });
       }
       
-      // Handle protocol links - Enhanced for multiple protocols
-      if ('URLPattern' in window) {
-        const habitPattern = new URLPattern({ pathname: '/habit' });
-        const importPattern = new URLPattern({ pathname: '/import' });
+      // Enhanced protocol handler detection and routing
+      function handleProtocolData() {
+        const url = new URL(window.location.href);
+        const pathname = url.pathname;
+        const searchParams = url.searchParams;
         
-        if (habitPattern.test(window.location)) {
-          const params = new URLSearchParams(window.location.search);
-          const data = params.get('data');
+        // Handle chainreact:// protocol via /habit route
+        if (pathname === '/habit') {
+          const data = searchParams.get('data');
           if (data) {
-            console.log('Habit protocol handler data:', data);
-            // Handle the habit protocol data here
+            console.log('ChainReact protocol handler - habit data:', data);
+            // Decode and handle habit protocol data
+            try {
+              const decodedData = decodeURIComponent(data);
+              // Store in localStorage for the app to pick up
+              localStorage.setItem('protocolHabitData', decodedData);
+              // Trigger a custom event for the React app to listen to
+              window.dispatchEvent(new CustomEvent('protocolHabitReceived', { 
+                detail: decodedData 
+              }));
+            } catch (error) {
+              console.error('Error processing habit protocol data:', error);
+            }
           }
         }
         
-        if (importPattern.test(window.location)) {
-          const params = new URLSearchParams(window.location.search);
-          const data = params.get('data');
+        // Handle web+chainreact:// protocol via /import route
+        if (pathname === '/import') {
+          const data = searchParams.get('data');
           if (data) {
-            console.log('Import protocol handler data:', data);
-            // Handle the import protocol data here
+            console.log('ChainReact protocol handler - import data:', data);
+            // Decode and handle import protocol data
+            try {
+              const decodedData = decodeURIComponent(data);
+              // Store in localStorage for the app to pick up
+              localStorage.setItem('protocolImportData', decodedData);
+              // Trigger a custom event for the React app to listen to
+              window.dispatchEvent(new CustomEvent('protocolImportReceived', { 
+                detail: decodedData 
+              }));
+            } catch (error) {
+              console.error('Error processing import protocol data:', error);
+            }
           }
         }
       }
+      
+      // Check for protocol data on page load
+      window.addEventListener('load', handleProtocolData);
+      
+      // Also check when URL changes (for SPAs)
+      window.addEventListener('popstate', handleProtocolData);
     </script>
   </body>
 </html>
