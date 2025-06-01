@@ -1,6 +1,6 @@
 
 // Cache name with version
-const CACHE_NAME = 'chainreact-cache-v3';
+const CACHE_NAME = 'chainreact-cache-v4';
 
 // Files to cache
 const urlsToCache = [
@@ -10,7 +10,9 @@ const urlsToCache = [
   '/icons/icon-192x192.png',
   '/icons/icon-512x512.png',
   '/icons/maskable-icon-512x512.png',
-  '/screenshots/screenshot1.png'
+  '/screenshots/screenshot1.png',
+  '/screenshots/screenshot2.png',
+  '/screenshots/mobile-screenshot.png'
 ];
 
 // Install service worker

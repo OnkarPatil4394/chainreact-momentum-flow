@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -106,15 +105,26 @@
         });
       }
       
-      // Handle protocol links
+      // Handle protocol links - Enhanced for multiple protocols
       if ('URLPattern' in window) {
-        const pattern = new URLPattern({ pathname: '/habit' });
-        if (pattern.test(window.location)) {
+        const habitPattern = new URLPattern({ pathname: '/habit' });
+        const importPattern = new URLPattern({ pathname: '/import' });
+        
+        if (habitPattern.test(window.location)) {
           const params = new URLSearchParams(window.location.search);
           const data = params.get('data');
           if (data) {
-            console.log('Protocol handler data:', data);
-            // Handle the protocol data here
+            console.log('Habit protocol handler data:', data);
+            // Handle the habit protocol data here
+          }
+        }
+        
+        if (importPattern.test(window.location)) {
+          const params = new URLSearchParams(window.location.search);
+          const data = params.get('data');
+          if (data) {
+            console.log('Import protocol handler data:', data);
+            // Handle the import protocol data here
           }
         }
       }

@@ -1,3 +1,4 @@
+
 {
   "name": "ChainReact - Build momentum. One habit at a time.",
   "short_name": "ChainReact",
@@ -38,6 +39,10 @@
     {
       "protocol": "chainreact",
       "url": "/habit?data=%s"
+    },
+    {
+      "protocol": "web+chainreact",
+      "url": "/import?data=%s"
     }
   ],
   "share_target": {
@@ -105,7 +110,21 @@
       "sizes": "1280x720",
       "type": "image/png",
       "platform": "wide",
-      "label": "ChainReact Dashboard"
+      "label": "ChainReact Dashboard - Track your habits and build momentum"
+    },
+    {
+      "src": "/screenshots/screenshot2.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "platform": "wide",
+      "label": "Statistics & Analytics - Monitor your progress over time"
+    },
+    {
+      "src": "/screenshots/mobile-screenshot.png",
+      "sizes": "640x1136",
+      "type": "image/png",
+      "platform": "narrow",
+      "label": "Mobile Experience - Perfect for on-the-go habit tracking"
     }
   ],
   "dir": "ltr",

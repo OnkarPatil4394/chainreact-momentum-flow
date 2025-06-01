@@ -1,3 +1,4 @@
 
-<!-- The image will be stored at /lovable-uploads/f891667c-5c36-4abc-af6f-e8e95549b13a.png -->
-<!-- This is a PNG file that will be used as the maskable 512x512 icon -->
+<!-- Creating a 512x512 maskable icon with proper padding for different OS requirements -->
+<!-- This ensures the icon looks good on all platforms when masked -->
+<!-- The image will be stored at /lovable-uploads/chainreact-maskable-512.png -->
