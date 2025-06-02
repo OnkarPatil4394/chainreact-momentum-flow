@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Home, BarChart2, Settings } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
 
 const Header = () => {
   const location = useLocation();
@@ -24,14 +23,6 @@ const Header = () => {
   return (
     <header className="bg-white dark:bg-gray-800 shadow-sm">
       <div className="container mx-auto px-4 py-4">
-        {/* App Name */}
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-1.5">
-            <h1 className="text-lg font-bold text-blue-600 dark:text-blue-400">ChainReact</h1>
-            <Badge className="bg-blue-500 text-white text-[10px] h-5">Beta</Badge>
-          </div>
-        </div>
-        
         {/* Navigation tabs */}
         <div className="flex items-center justify-between">
           <Link to="/">
