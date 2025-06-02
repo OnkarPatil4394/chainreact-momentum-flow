@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { db } from '../db/database';
+import { sanitizeInput, validateInput } from '../utils/security';
 
 interface WelcomeScreenProps {
   onComplete: () => void;
@@ -10,15 +11,38 @@ interface WelcomeScreenProps {
 
 const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onComplete }) => {
   const [userName, setUserName] = useState('');
+  const [error, setError] = useState('');
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (userName.trim()) {
+    setError('');
+    
+    try {
+      const sanitizedName = sanitizeInput(userName);
+      
+      if (!sanitizedName.trim()) {
+        setError('Name is required');
+        return;
+      }
+      
+      if (!validateInput(sanitizedName, 50)) {
+        setError('Name contains invalid characters or is too long');
+        return;
+      }
+      
       // Save the user name to the database
-      db.saveUserName(userName.trim());
+      db.saveUserName(sanitizedName);
       // Complete the welcome process
       onComplete();
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Invalid name');
     }
+  };
+  
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const sanitizedValue = sanitizeInput(e.target.value);
+    setUserName(sanitizedValue);
+    if (error) setError(''); // Clear error on change
   };
   
   return (
@@ -47,11 +71,15 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onComplete }) => {
           <Input
             id="userName"
             value={userName}
-            onChange={(e) => setUserName(e.target.value)}
+            onChange={handleNameChange}
             placeholder="Your name"
             className="bg-white"
+            maxLength={50}
             required
           />
+          {error && (
+            <p className="mt-1 text-sm text-red-600">{error}</p>
+          )}
         </div>
         
         <Button 

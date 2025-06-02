@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Dialog } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -9,6 +8,7 @@ import { HabitChain, Habit } from '../types/types';
 import { db, generateId } from '../db/database';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { toast } from '@/hooks/use-toast';
+import { sanitizeInput, validateInput } from '../utils/security';
 
 interface CreateHabitModalProps {
   open: boolean;
@@ -55,83 +55,152 @@ const CreateHabitModal: React.FC<CreateHabitModalProps> = ({ open, onClose, edit
   };
 
   const handleHabitChange = (id: string, field: 'name' | 'description', value: string) => {
+    // Sanitize input on change
+    const sanitizedValue = sanitizeInput(value);
     setHabits(habits.map(h => 
-      h.id === id ? { ...h, [field]: value } : h
+      h.id === id ? { ...h, [field]: sanitizedValue } : h
     ));
   };
 
   const handleDeleteChain = () => {
     if (editingChain && confirm('Are you sure you want to delete this habit chain?')) {
-      db.deleteChain(editingChain.id);
-      toast({
-        title: "Habit chain deleted",
-        description: "Your habit chain has been removed",
-        duration: 3000,
-      });
-      onClose();
+      try {
+        db.deleteChain(editingChain.id);
+        toast({
+          title: "Habit chain deleted",
+          description: "Your habit chain has been removed",
+          duration: 3000,
+        });
+        onClose();
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "Failed to delete habit chain",
+          variant: "destructive",
+          duration: 3000,
+        });
+      }
     }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Basic validation
-    if (!chainName.trim()) return;
-    if (habits.some(h => !h.name.trim())) return;
-    
-    if (editingChain) {
-      // Update existing chain
-      const updatedChain: HabitChain = {
-        ...editingChain,
-        name: chainName,
-        description: chainDescription,
-        habits: habits.map(h => ({
-          ...h,
-          chainId: editingChain.id,
-          completed: false,
-          completedAt: null
-        }))
-      };
+    try {
+      // Sanitize inputs
+      const sanitizedChainName = sanitizeInput(chainName);
+      const sanitizedChainDescription = sanitizeInput(chainDescription);
       
-      db.updateChain(updatedChain);
-      toast({
-        title: "Habit chain updated",
-        description: "Your changes have been saved",
-        duration: 3000,
-      });
-    } else {
-      // Create new chain
-      const newChainId = generateId();
-      const newChain: HabitChain = {
-        id: newChainId,
-        name: chainName,
-        description: chainDescription,
-        habits: habits.map(h => ({
-          ...h,
-          chainId: newChainId,
-          completed: false,
-          completedAt: null
-        })),
-        createdAt: new Date().toISOString(),
-        lastCompleted: null,
-        streak: 0,
-        longestStreak: 0,
-        totalCompletions: 0
-      };
+      // Basic validation
+      if (!sanitizedChainName.trim()) {
+        toast({
+          title: "Error",
+          description: "Chain name is required",
+          variant: "destructive",
+          duration: 3000,
+        });
+        return;
+      }
       
-      db.addChain(newChain);
+      if (!validateInput(sanitizedChainName, 100)) {
+        toast({
+          title: "Error",
+          description: "Chain name is invalid or too long",
+          variant: "destructive",
+          duration: 3000,
+        });
+        return;
+      }
+      
+      if (habits.some(h => !sanitizeInput(h.name).trim())) {
+        toast({
+          title: "Error",
+          description: "All habits must have names",
+          variant: "destructive",
+          duration: 3000,
+        });
+        return;
+      }
+      
+      // Validate habit names
+      for (const habit of habits) {
+        if (!validateInput(habit.name, 100)) {
+          toast({
+            title: "Error",
+            description: "One or more habit names are invalid",
+            variant: "destructive",
+            duration: 3000,
+          });
+          return;
+        }
+      }
+      
+      if (editingChain) {
+        // Update existing chain
+        const updatedChain: HabitChain = {
+          ...editingChain,
+          name: sanitizedChainName,
+          description: sanitizedChainDescription,
+          habits: habits.map(h => ({
+            ...h,
+            name: sanitizeInput(h.name),
+            description: sanitizeInput(h.description),
+            chainId: editingChain.id,
+            completed: false,
+            completedAt: null
+          }))
+        };
+        
+        db.updateChain(updatedChain);
+        toast({
+          title: "Habit chain updated",
+          description: "Your changes have been saved",
+          duration: 3000,
+        });
+      } else {
+        // Create new chain
+        const newChainId = generateId();
+        const newChain: HabitChain = {
+          id: newChainId,
+          name: sanitizedChainName,
+          description: sanitizedChainDescription,
+          habits: habits.map(h => ({
+            ...h,
+            name: sanitizeInput(h.name),
+            description: sanitizeInput(h.description),
+            chainId: newChainId,
+            completed: false,
+            completedAt: null
+          })),
+          createdAt: new Date().toISOString(),
+          lastCompleted: null,
+          streak: 0,
+          longestStreak: 0,
+          totalCompletions: 0
+        };
+        
+        db.addChain(newChain);
+        toast({
+          title: "Habit chain created",
+          description: "Start building momentum with your new chain",
+          duration: 3000,
+        });
+      }
+      
+      // Reset form and close modal
+      setChainName('');
+      setChainDescription('');
+      setHabits([{ id: generateId(), name: '', description: '', position: 0 }]);
+      onClose();
+    } catch (error) {
+      console.error('Error saving habit chain:', error);
       toast({
-        title: "Habit chain created",
-        description: "Start building momentum with your new chain",
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to save habit chain",
+        variant: "destructive",
         duration: 3000,
       });
     }
-    
-    // Reset form and close modal
-    setChainName('');
-    setChainDescription('');
-    setHabits([{ id: generateId(), name: '', description: '', position: 0 }]);
-    onClose();
   };
 
   return (

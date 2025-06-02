@@ -1,5 +1,5 @@
-
 import { Habit, HabitChain, UserStats, Badge, AppSettings } from "../types/types";
+import { sanitizeInput, validateInput, safeJsonParse, validateImportData, rateLimit } from "../utils/security";
 
 // Initialize default data
 const initialStats: UserStats = {
@@ -93,20 +93,70 @@ class Database {
     return chain || null;
   }
 
-  // Create new chain
+  // Create new chain with security validation
   addChain(chain: HabitChain): void {
+    if (!rateLimit('addChain', 5, 60000)) {
+      throw new Error('Rate limit exceeded for chain creation');
+    }
+    
+    // Sanitize inputs
+    const sanitizedChain = {
+      ...chain,
+      name: sanitizeInput(chain.name),
+      description: sanitizeInput(chain.description || ''),
+      habits: chain.habits.map(h => ({
+        ...h,
+        name: sanitizeInput(h.name),
+        description: sanitizeInput(h.description || '')
+      }))
+    };
+    
+    // Validate inputs
+    if (!validateInput(sanitizedChain.name, 100)) {
+      throw new Error('Invalid chain name');
+    }
+    
+    if (sanitizedChain.description && !validateInput(sanitizedChain.description, 500)) {
+      throw new Error('Invalid chain description');
+    }
+    
+    for (const habit of sanitizedChain.habits) {
+      if (!validateInput(habit.name, 100)) {
+        throw new Error('Invalid habit name');
+      }
+      if (habit.description && !validateInput(habit.description, 200)) {
+        throw new Error('Invalid habit description');
+      }
+    }
+    
     const chains = this.getChains();
-    chains.push(chain);
+    chains.push(sanitizedChain);
     this.saveChains(chains);
     this.checkBadges();
   }
 
-  // Update existing chain
+  // Update existing chain with security validation
   updateChain(updatedChain: HabitChain): void {
+    if (!rateLimit('updateChain', 10, 60000)) {
+      throw new Error('Rate limit exceeded for chain updates');
+    }
+    
+    // Sanitize inputs
+    const sanitizedChain = {
+      ...updatedChain,
+      name: sanitizeInput(updatedChain.name),
+      description: sanitizeInput(updatedChain.description || ''),
+      habits: updatedChain.habits.map(h => ({
+        ...h,
+        name: sanitizeInput(h.name),
+        description: sanitizeInput(h.description || '')
+      }))
+    };
+    
     const chains = this.getChains();
-    const index = chains.findIndex((c) => c.id === updatedChain.id);
+    const index = chains.findIndex((c) => c.id === sanitizedChain.id);
     if (index !== -1) {
-      chains[index] = updatedChain;
+      chains[index] = sanitizedChain;
       this.saveChains(chains);
     }
   }
@@ -267,43 +317,66 @@ class Database {
     this.saveStats(stats);
   }
 
-  // Export data
+  // Secure export data
   exportData(): string {
     const data = {
-      userName: this.getUserName(),
+      userName: sanitizeInput(this.getUserName()),
       chains: this.getChains(),
       stats: this.getStats(),
       settings: this.getSettings(),
+      exportedAt: new Date().toISOString(),
+      version: '1.0'
     };
     return JSON.stringify(data);
   }
 
-  // Import data
+  // Secure import data with validation
   importData(jsonData: string): boolean {
+    if (!rateLimit('importData', 3, 300000)) { // 3 imports per 5 minutes
+      throw new Error('Rate limit exceeded for data imports');
+    }
+    
     try {
-      const data = JSON.parse(jsonData);
-      if (data.chains && data.stats && data.settings) {
-        this.saveChains(data.chains);
-        this.saveStats(data.stats);
-        this.saveSettings(data.settings);
-        
-        // Import user name if available
-        if (data.userName) {
-          this.saveUserName(data.userName);
-        }
-        
-        return true;
+      const data = safeJsonParse(jsonData);
+      if (!data || !validateImportData(data)) {
+        throw new Error('Invalid import data structure');
       }
-      return false;
+      
+      // Sanitize all text fields before saving
+      const sanitizedChains = data.chains.map((chain: any) => ({
+        ...chain,
+        name: sanitizeInput(chain.name),
+        description: sanitizeInput(chain.description || ''),
+        habits: chain.habits.map((h: any) => ({
+          ...h,
+          name: sanitizeInput(h.name),
+          description: sanitizeInput(h.description || '')
+        }))
+      }));
+      
+      this.saveChains(sanitizedChains);
+      this.saveStats(data.stats);
+      this.saveSettings(data.settings);
+      
+      // Import user name if available
+      if (data.userName) {
+        this.saveUserName(sanitizeInput(data.userName));
+      }
+      
+      return true;
     } catch (e) {
       console.error("Failed to import data:", e);
       return false;
     }
   }
   
-  // User name operations
+  // Secure user name operations
   saveUserName(name: string): void {
-    localStorage.setItem("userName", name);
+    const sanitizedName = sanitizeInput(name);
+    if (!validateInput(sanitizedName, 50)) {
+      throw new Error('Invalid user name');
+    }
+    localStorage.setItem("userName", sanitizedName);
   }
   
   getUserName(): string {
