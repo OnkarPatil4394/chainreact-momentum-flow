@@ -337,7 +337,15 @@ class Database {
     }
     
     try {
-      const data = safeJsonParse(jsonData);
+      const data = safeJsonParse<{
+        userName?: string;
+        chains: any[];
+        stats: any;
+        settings: any;
+        exportedAt: string;
+        version: string;
+      }>(jsonData);
+      
       if (!data || !validateImportData(data)) {
         throw new Error('Invalid import data structure');
       }
