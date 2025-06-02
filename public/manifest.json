@@ -37,10 +37,6 @@
   "handle_links": "preferred",
   "protocol_handlers": [
     {
-      "protocol": "chainreact",
-      "url": "/habit?data=%s"
-    },
-    {
       "protocol": "web+chainreact",
       "url": "/import?data=%s"
     }
@@ -106,25 +102,25 @@
   ],
   "screenshots": [
     {
-      "src": "/screenshots/screenshot1.png",
+      "src": "https://onkarpatil4394.github.io/Chainreact-Assets/Screenshot%202025-06-01%20151646.png",
       "sizes": "1280x720",
       "type": "image/png",
       "platform": "wide",
-      "label": "ChainReact Dashboard - Track your habits and build momentum"
+      "label": "ChainReact Dashboard – Track your habits and build momentum"
     },
     {
-      "src": "/screenshots/screenshot2.png",
+      "src": "https://onkarpatil4394.github.io/Chainreact-Assets/Screenshot%202025-06-01%20151657.png",
       "sizes": "1280x720",
       "type": "image/png",
       "platform": "wide",
-      "label": "Statistics & Analytics - Monitor your progress over time"
+      "label": "Statistics – Analyze your progress visually"
     },
     {
-      "src": "/screenshots/mobile-screenshot.png",
+      "src": "https://onkarpatil4394.github.io/Chainreact-Assets/Screenshot%202025-06-01%20151727.png",
       "sizes": "640x1136",
       "type": "image/png",
       "platform": "narrow",
-      "label": "Mobile Experience - Perfect for on-the-go habit tracking"
+      "label": "Mobile Experience – Habit tracking on the go"
     }
   ],
   "dir": "ltr",
