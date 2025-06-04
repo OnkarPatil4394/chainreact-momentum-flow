@@ -1,7 +1,8 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { AlertCircle, Smartphone, Monitor, Trash, Windows, Info } from 'lucide-react';
+import { AlertCircle, Smartphone, Monitor, Trash, Info } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 
 interface BeforeInstallPromptEvent extends Event {
