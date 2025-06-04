@@ -6,8 +6,8 @@
   "start_url": "/",
   "id": "/",
   "display": "standalone",
-  "display_override": ["window-controls-overlay", "standalone"],
-  "orientation": "portrait",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "orientation": "any",
   "background_color": "#ffffff",
   "theme_color": "#000000",
   "iarc_rating_id": "e84b072d-71b3-4d3e-86ae-31a8ce4e53b7",
@@ -17,6 +17,7 @@
   "edge_side_panel": {
     "preferred_width": 400
   },
+  "handle_links": "preferred",
   "file_handlers": [
     {
       "action": "/import",
@@ -34,7 +35,6 @@
       "launch_type": "single-client"
     }
   ],
-  "handle_links": "preferred",
   "protocol_handlers": [
     {
       "protocol": "web+chainreact",
@@ -148,6 +148,19 @@
       "short_name": "Stats",
       "description": "View your habit statistics",
       "url": "/stats",
+      "icons": [
+        {
+          "src": "https://onkarpatil4394.github.io/Chainreact-Assets/android-chrome-192x192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Settings",
+      "short_name": "Settings", 
+      "description": "App settings and preferences",
+      "url": "/settings",
       "icons": [
         {
           "src": "https://onkarpatil4394.github.io/Chainreact-Assets/android-chrome-192x192.png",

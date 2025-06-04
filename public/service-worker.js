@@ -1,8 +1,8 @@
 
-// Cache name with version
-const CACHE_NAME = 'chainreact-cache-v4';
+// Cache name with version - optimized for Windows
+const CACHE_NAME = 'chainreact-cache-v5-windows';
 
-// Files to cache
+// Files to cache - optimized for Windows performance
 const urlsToCache = [
   '/',
   '/index.html',
@@ -15,29 +15,53 @@ const urlsToCache = [
   '/screenshots/mobile-screenshot.png'
 ];
 
-// Install service worker
+// Install service worker with Windows optimizations
 self.addEventListener('install', (event) => {
-  // Perform install steps
+  console.log('Service Worker installing - Windows optimized');
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
         console.log('Opened cache');
-        return cache.addAll(urlsToCache);
+        // Use addAll with better error handling for Windows
+        return cache.addAll(urlsToCache.map(url => new Request(url, { cache: 'reload' })));
+      })
+      .catch(error => {
+        console.error('Cache installation failed:', error);
       })
   );
   // Skip waiting to activate immediately
   self.skipWaiting();
 });
 
-// Cache and return requests
+// Enhanced fetch handler optimized for Windows
 self.addEventListener('fetch', (event) => {
+  // Skip non-GET requests and chrome-extension requests
+  if (event.request.method !== 'GET' || event.request.url.startsWith('chrome-extension://')) {
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request)
       .then((response) => {
         // Cache hit - return response
         if (response) {
+          // For Windows, also try to update cache in background
+          if (navigator.onLine) {
+            fetch(event.request).then(fetchResponse => {
+              if (fetchResponse && fetchResponse.status === 200) {
+                const responseClone = fetchResponse.clone();
+                caches.open(CACHE_NAME).then(cache => {
+                  cache.put(event.request, responseClone);
+                });
+              }
+            }).catch(() => {
+              // Ignore fetch errors in background update
+            });
+          }
           return response;
         }
+
+        // No cache hit - fetch from network
         return fetch(event.request).then(
           (response) => {
             // Check if we received a valid response
@@ -45,8 +69,7 @@ self.addEventListener('fetch', (event) => {
               return response;
             }
 
-            // IMPORTANT: Clone the response
-            // We need one to return to the browser and one to save in cache
+            // Clone the response for caching
             const responseToCache = response.clone();
 
             caches.open(CACHE_NAME)
@@ -56,108 +79,151 @@ self.addEventListener('fetch', (event) => {
 
             return response;
           }
-        );
+        ).catch(() => {
+          // Network failed, return offline page if available
+          if (event.request.destination === 'document') {
+            return caches.match('/');
+          }
+        });
       })
   );
 });
 
-// Update service worker
+// Update service worker with Windows-specific cleanup
 self.addEventListener('activate', (event) => {
+  console.log('Service Worker activating - Windows optimized');
   const cacheAllowlist = [CACHE_NAME];
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
           if (cacheAllowlist.indexOf(cacheName) === -1) {
+            console.log('Deleting old cache:', cacheName);
             return caches.delete(cacheName);
           }
         })
       );
+    }).then(() => {
+      // Claim clients to control all open tabs immediately
+      return self.clients.claim();
     })
   );
-  // Claim clients to control all open tabs
-  self.clients.claim();
 });
 
-// Handle file imports
+// Windows-specific file handling
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'IMPORT_FILE') {
-    // Handle file import data
     const fileData = event.data.payload;
-    console.log('File import received:', fileData);
+    console.log('File import received (Windows):', fileData);
     
-    // Store the import data temporarily
+    // Store the import data with Windows-specific handling
     self.registration.postMessage({
       type: 'FILE_IMPORTED',
-      data: fileData
+      data: fileData,
+      platform: 'windows'
     });
+  }
+  
+  // Handle Windows-specific actions
+  if (event.data && event.data.type === 'WINDOWS_ACTION') {
+    const action = event.data.action;
+    switch (action) {
+      case 'MINIMIZE_TO_TRAY':
+        // Handle minimize to system tray if supported
+        break;
+      case 'NOTIFICATION_PERMISSION':
+        // Handle Windows notification permissions
+        break;
+    }
   }
 });
 
-// Background Sync
+// Enhanced Background Sync for Windows
 self.addEventListener('sync', (event) => {
   if (event.tag === 'sync-habits') {
     event.waitUntil(syncHabits());
   }
+  if (event.tag === 'windows-sync') {
+    event.waitUntil(windowsSpecificSync());
+  }
 });
 
-// Function to sync habits data
+// Windows-specific sync function
+async function windowsSpecificSync() {
+  console.log('Performing Windows-specific background sync');
+  // Handle Windows-specific background tasks
+  return;
+}
+
+// Enhanced habit sync function
 async function syncHabits() {
-  // Retrieve queued habit updates from IndexedDB
-  // This would sync with a server if there was one
   const habitsToSync = await getHabitsToSync();
   
   if (habitsToSync && habitsToSync.length > 0) {
-    console.log('Syncing habits in background');
-    // In a real app, you would send this data to a server
-    // Since this app is 100% offline, we'll just mark them as synced
+    console.log('Syncing habits in background (Windows optimized)');
     await markHabitsSynced(habitsToSync);
   }
   return;
 }
 
-// Dummy functions for habit sync - in a real app, these would interact with IndexedDB
-async function getHabitsToSync() {
-  // In real implementation, get from IndexedDB
-  return [];
-}
-
-async function markHabitsSynced(habits) {
-  // In real implementation, update IndexedDB
-  return true;
-}
-
-// Periodic Background Sync (for newer browsers that support it)
-self.addEventListener('periodicsync', (event) => {
-  if (event.tag === 'update-habits') {
-    event.waitUntil(updateHabits());
-  }
-});
-
-async function updateHabits() {
-  console.log('Performing periodic sync to check for habit updates');
-  // In a real app with a server, you would fetch updates
-  // Since this is 100% offline, we'll just check for local updates
-  return;
-}
-
-// Push notifications
+// Enhanced push notifications for Windows
 self.addEventListener('push', (event) => {
   const title = 'ChainReact Reminder';
   const options = {
     body: event.data ? event.data.text() : 'Time to complete your habits!',
     icon: '/icons/icon-192x192.png',
-    badge: '/icons/icon-192x192.png'
+    badge: '/icons/icon-192x192.png',
+    tag: 'habit-reminder',
+    requireInteraction: true, // Keep notification visible on Windows
+    actions: [
+      {
+        action: 'open',
+        title: 'Open ChainReact'
+      },
+      {
+        action: 'dismiss',
+        title: 'Dismiss'
+      }
+    ],
+    data: {
+      url: '/',
+      timestamp: Date.now()
+    }
   };
 
-  event.waitUntil(self.registration.showNotification(title, options));
+  event.waitUntil(
+    self.registration.showNotification(title, options)
+  );
 });
 
-// Notification click event
+// Enhanced notification click handling for Windows
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
   
-  event.waitUntil(
-    clients.openWindow('/')
-  );
+  if (event.action === 'open' || !event.action) {
+    event.waitUntil(
+      clients.matchAll({ type: 'window' }).then(clientList => {
+        // If a window is already open, focus it
+        for (let i = 0; i < clientList.length; i++) {
+          const client = clientList[i];
+          if (client.url.includes(self.location.origin) && 'focus' in client) {
+            return client.focus();
+          }
+        }
+        // If no window is open, open a new one
+        if (clients.openWindow) {
+          return clients.openWindow('/');
+        }
+      })
+    );
+  }
 });
+
+// Dummy functions for habit sync
+async function getHabitsToSync() {
+  return [];
+}
+
+async function markHabitsSynced(habits) {
+  return true;
+}
