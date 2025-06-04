@@ -1,5 +1,7 @@
 import { Habit, HabitChain, UserStats, Badge, AppSettings } from "../types/types";
 import { sanitizeInput, validateInput, safeJsonParse, validateImportData, rateLimit } from "../utils/security";
+import { secureStorage } from "../utils/secureStorage";
+import { generateSecureId, validateId } from "../utils/secureId";
 
 // Initialize default data
 const initialStats: UserStats = {
@@ -76,18 +78,22 @@ const initialSettings: AppSettings = {
 
 // Database operations
 class Database {
-  // Store habit chains
+  // Store habit chains with secure storage
   saveChains(chains: HabitChain[]): void {
-    localStorage.setItem("chains", JSON.stringify(chains));
+    secureStorage.setItem("chains", chains);
   }
 
   getChains(): HabitChain[] {
-    const chains = localStorage.getItem("chains");
-    return chains ? JSON.parse(chains) : [];
+    const chains = secureStorage.getItem<HabitChain[]>("chains");
+    return chains || [];
   }
 
-  // Get a specific chain
+  // Get a specific chain with ID validation
   getChain(chainId: string): HabitChain | null {
+    if (!validateId(chainId)) {
+      console.warn('Invalid chain ID format');
+      return null;
+    }
     const chains = this.getChains();
     const chain = chains.find((c) => c.id === chainId);
     return chain || null;
@@ -168,8 +174,13 @@ class Database {
     this.saveChains(filteredChains);
   }
 
-  // Mark habit as completed
+  // Mark habit as completed with enhanced validation
   completeHabit(chainId: string, habitId: string): boolean {
+    if (!validateId(chainId) || !validateId(habitId)) {
+      console.warn('Invalid ID format');
+      return false;
+    }
+
     const chains = this.getChains();
     const chain = chains.find((c) => c.id === chainId);
     
@@ -237,24 +248,24 @@ class Database {
     return true;
   }
 
-  // Stats operations
+  // Stats operations with secure storage
   getStats(): UserStats {
-    const stats = localStorage.getItem("stats");
-    return stats ? JSON.parse(stats) : initialStats;
+    const stats = secureStorage.getItem<UserStats>("stats");
+    return stats || initialStats;
   }
 
   saveStats(stats: UserStats): void {
-    localStorage.setItem("stats", JSON.stringify(stats));
+    secureStorage.setItem("stats", stats);
   }
 
-  // Settings operations
+  // Settings operations with secure storage
   getSettings(): AppSettings {
-    const settings = localStorage.getItem("settings");
-    return settings ? JSON.parse(settings) : initialSettings;
+    const settings = secureStorage.getItem<AppSettings>("settings");
+    return settings || initialSettings;
   }
 
   saveSettings(settings: AppSettings): void {
-    localStorage.setItem("settings", JSON.stringify(settings));
+    secureStorage.setItem("settings", settings);
   }
 
   // Check and update badges
@@ -317,7 +328,7 @@ class Database {
     this.saveStats(stats);
   }
 
-  // Secure export data
+  // Enhanced secure export with integrity checksums
   exportData(): string {
     const data = {
       userName: sanitizeInput(this.getUserName()),
@@ -325,33 +336,66 @@ class Database {
       stats: this.getStats(),
       settings: this.getSettings(),
       exportedAt: new Date().toISOString(),
-      version: '1.0'
+      version: '2.0',
+      integrity: true
     };
-    return JSON.stringify(data);
+    
+    const jsonData = JSON.stringify(data);
+    const checksum = this.calculateDataChecksum(jsonData);
+    
+    return JSON.stringify({
+      ...data,
+      checksum
+    });
   }
 
-  // Secure import data with validation
+  private calculateDataChecksum(data: string): string {
+    let hash = 0;
+    for (let i = 0; i < data.length; i++) {
+      const char = data.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash;
+    }
+    return Math.abs(hash).toString(16);
+  }
+
+  // Enhanced secure import with integrity verification
   importData(jsonData: string): boolean {
-    if (!rateLimit('importData', 3, 300000)) { // 3 imports per 5 minutes
+    if (!rateLimit('importData', 3, 300000)) {
       throw new Error('Rate limit exceeded for data imports');
     }
     
     try {
-      const data = safeJsonParse<{
+      const importedData = safeJsonParse<{
         userName?: string;
         chains: any[];
         stats: any;
         settings: any;
         exportedAt: string;
         version: string;
+        checksum?: string;
+        integrity?: boolean;
       }>(jsonData);
       
-      if (!data || !validateImportData(data)) {
+      if (!importedData || !validateImportData(importedData)) {
         throw new Error('Invalid import data structure');
       }
-      
+
+      // Verify data integrity if checksum is present
+      if (importedData.checksum && importedData.integrity) {
+        const dataForChecksum = JSON.stringify({
+          ...importedData,
+          checksum: undefined
+        });
+        const calculatedChecksum = this.calculateDataChecksum(dataForChecksum);
+        
+        if (calculatedChecksum !== importedData.checksum) {
+          throw new Error('Data integrity verification failed');
+        }
+      }
+
       // Sanitize all text fields before saving
-      const sanitizedChains = data.chains.map((chain: any) => ({
+      const sanitizedChains = importedData.chains.map((chain: any) => ({
         ...chain,
         name: sanitizeInput(chain.name),
         description: sanitizeInput(chain.description || ''),
@@ -363,12 +407,12 @@ class Database {
       }));
       
       this.saveChains(sanitizedChains);
-      this.saveStats(data.stats);
-      this.saveSettings(data.settings);
+      this.saveStats(importedData.stats);
+      this.saveSettings(importedData.settings);
       
       // Import user name if available
-      if (data.userName) {
-        this.saveUserName(sanitizeInput(data.userName));
+      if (importedData.userName) {
+        this.saveUserName(sanitizeInput(importedData.userName));
       }
       
       return true;
@@ -384,22 +428,22 @@ class Database {
     if (!validateInput(sanitizedName, 50)) {
       throw new Error('Invalid user name');
     }
-    localStorage.setItem("userName", sanitizedName);
+    secureStorage.setItem("userName", sanitizedName);
   }
   
   getUserName(): string {
-    return localStorage.getItem("userName") || "";
+    return secureStorage.getItem<string>("userName") || "";
   }
   
   // Check if this is the first time opening the app
   isFirstTimeUser(): boolean {
-    return !localStorage.getItem("userName");
+    return !secureStorage.getItem("userName");
   }
 }
 
 export const db = new Database();
 
-// Helper to generate unique IDs
+// Enhanced secure ID generation
 export function generateId(): string {
-  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+  return generateSecureId();
 }

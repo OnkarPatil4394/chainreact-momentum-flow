@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -119,7 +118,7 @@ const PWAUninstall = () => {
       <div className="flex items-center mb-4">
         <h3 className="text-base font-medium text-gray-800 dark:text-gray-200">PWA Management</h3>
         {isWindows && (
-          <Windows size={16} className="ml-2 text-blue-500" />
+          <Monitor size={16} className="ml-2 text-blue-500" />
         )}
       </div>
       

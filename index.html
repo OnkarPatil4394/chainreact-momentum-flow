@@ -1,271 +1,65 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ChainReact - Build momentum. One habit at a time.</title>
-    <meta name="description" content="A minimalist, gamified habit tracker built to run 100% offline" />
-    <meta name="author" content="Lovable" />
-
-    <!-- Content Security Policy -->
+    
+    <!-- Enhanced Security Headers -->
     <meta http-equiv="Content-Security-Policy" content="
-      default-src 'self';
-      script-src 'self' 'unsafe-inline' https://cdn.gpteng.co https://fonts.googleapis.com;
+      default-src 'self' https://onkarpatil4394.github.io https://b32626aa-f522-4b29-97f5-9c8342dadcb5.lovableproject.com;
+      script-src 'self' 'unsafe-eval';
       style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-      font-src 'self' https://fonts.gstatic.com;
-      img-src 'self' data: https: blob:;
-      connect-src 'self' https:;
-      media-src 'self';
-      object-src 'none';
+      font-src 'self' https://fonts.gstatic.com data:;
+      img-src 'self' https://onkarpatil4394.github.io data: blob:;
+      connect-src 'self' https://api.github.com https://fonts.googleapis.com https://fonts.gstatic.com;
+      worker-src 'self';
+      manifest-src 'self';
       base-uri 'self';
       form-action 'self';
       frame-ancestors 'none';
+      upgrade-insecure-requests;
     ">
-
-    <meta property="og:title" content="ChainReact - Build momentum. One habit at a time." />
-    <meta property="og:description" content="A minimalist, gamified habit tracker built to run 100% offline" />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
-
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@lovable_dev" />
-    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
     
-    <!-- PWA related meta tags -->
     <meta name="theme-color" content="#000000" />
+    <meta name="color-scheme" content="light dark" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="ChainReact" />
-    
-    <!-- Windows-specific meta tags -->
-    <meta name="application-name" content="ChainReact" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
     <meta name="msapplication-TileColor" content="#000000" />
-    <meta name="msapplication-config" content="/browserconfig.xml" />
-    <meta name="msapplication-starturl" content="/" />
-    <meta name="msapplication-navbutton-color" content="#000000" />
+    <meta name="msapplication-TileImage" content="/icons/icon-192x192.png" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@onkarpatil4394" />
+    <meta name="twitter:creator" content="@onkarpatil4394" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ChainReact" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="512" />
+    <meta property="og:image:height" content="512" />
     
     <link rel="manifest" href="/manifest.json" />
-    <link rel="icon" href="/icons/icon-192x192.png" />
-    <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
     
-    <!-- Windows-specific icons -->
-    <meta name="msapplication-square70x70logo" content="/icons/icon-192x192.png" />
-    <meta name="msapplication-square150x150logo" content="/icons/icon-192x192.png" />
-    <meta name="msapplication-wide310x150logo" content="/icons/icon-512x512.png" />
-    <meta name="msapplication-square310x310logo" content="/icons/icon-512x512.png" />
-    
-    <!-- Additional Apple splash screen icons -->
-    <link rel="apple-touch-startup-image" href="/icons/icon-512x512.png" />
-    
-    <!-- Windows Controls Overlay CSS with enhanced styling -->
-    <style>
-      /* Windows-specific optimizations */
-      @media (display-mode: window-controls-overlay) {
-        body {
-          padding-top: env(titlebar-area-height, 40px);
-          --titlebar-height: env(titlebar-area-height, 40px);
-        }
-        
-        .titlebar-area {
-          position: fixed;
-          top: 0;
-          left: env(titlebar-area-x, 0);
-          width: env(titlebar-area-width, 100%);
-          height: env(titlebar-area-height, 40px);
-          background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
-          display: flex;
-          align-items: center;
-          padding: 0 16px;
-          z-index: 1000;
-          app-region: drag;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-          backdrop-filter: blur(10px);
-        }
-        
-        .titlebar-area .app-title {
-          color: white;
-          font-weight: 600;
-          font-size: 14px;
-          app-region: no-drag;
-          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-        }
-        
-        /* Windows-specific scrollbar styling */
-        ::-webkit-scrollbar {
-          width: 12px;
-        }
-        
-        ::-webkit-scrollbar-track {
-          background: #f1f1f1;
-        }
-        
-        ::-webkit-scrollbar-thumb {
-          background: #c1c1c1;
-          border-radius: 6px;
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-          background: #a8a8a8;
-        }
-        
-        /* Dark mode scrollbar */
-        .dark ::-webkit-scrollbar-track {
-          background: #2d2d2d;
-        }
-        
-        .dark ::-webkit-scrollbar-thumb {
-          background: #555;
-        }
-        
-        .dark ::-webkit-scrollbar-thumb:hover {
-          background: #666;
-        }
-      }
-      
-      /* Windows performance optimizations */
-      * {
-        box-sizing: border-box;
-      }
-      
-      img {
-        image-rendering: -webkit-optimize-contrast;
-      }
-      
-      /* Windows-specific animations */
-      @media (prefers-reduced-motion: no-preference) {
-        .smooth-transition {
-          transition: all 0.2s ease-out;
-        }
-      }
-      
-      /* Windows high contrast mode support */
-      @media (prefers-contrast: high) {
-        .titlebar-area {
-          background: ButtonFace;
-          border-bottom: 1px solid ButtonText;
-        }
-        
-        .titlebar-area .app-title {
-          color: ButtonText;
-        }
-      }
-    </style>
-  </head>
-
-  <body>
-    <!-- Titlebar for window controls overlay -->
-    <div class="titlebar-area">
-      <span class="app-title">ChainReact</span>
-    </div>
-    
-    <div id="root"></div>
-    <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
-    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
-    <script type="module" src="/src/main.tsx"></script>
+    <!-- Service Worker Registration with Enhanced Security -->
     <script>
-      // Enhanced service worker registration with Windows optimizations
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/service-worker.js')
-            .then(registration => {
-              console.log('ServiceWorker registration successful with scope: ', registration.scope);
-              
-              // Windows-specific service worker features
-              if (navigator.userAgent.includes('Windows')) {
-                console.log('Windows-optimized service worker loaded');
-                
-                // Register for background sync if available
-                if ('sync' in window.ServiceWorkerRegistration.prototype) {
-                  registration.sync.register('windows-sync');
-                }
-              }
-            })
-            .catch(error => {
-              console.log('ServiceWorker registration failed: ', error);
-            });
+          navigator.serviceWorker.register('/service-worker.js', {
+            scope: '/',
+            updateViaCache: 'none'
+          }).then((registration) => {
+            console.log('SW registered with enhanced security: ', registration);
+          }).catch((registrationError) => {
+            console.log('SW registration failed: ', registrationError);
+          });
         });
       }
-      
-      // Enhanced file handling with Windows integration
-      if ('launchQueue' in window) {
-        window.launchQueue.setConsumer((launchParams) => {
-          if (launchParams.files && launchParams.files.length) {
-            launchParams.files.forEach(async (fileHandle) => {
-              const file = await fileHandle.getFile();
-              const content = await file.text();
-              
-              console.log('Windows file handler - processing file:', file.name);
-              
-              navigator.serviceWorker.controller?.postMessage({
-                type: 'IMPORT_FILE',
-                payload: {
-                  name: file.name,
-                  content: content,
-                  type: file.type,
-                  platform: 'windows'
-                }
-              });
-            });
-          }
-        });
-      }
-      
-      // Enhanced protocol handler with Windows optimizations
-      function handleProtocolData() {
-        const url = new URL(window.location.href);
-        const pathname = url.pathname;
-        const searchParams = url.searchParams;
-        
-        if (pathname === '/habit') {
-          const data = searchParams.get('data');
-          if (data) {
-            console.log('Windows protocol handler - habit data:', data);
-            try {
-              const decodedData = decodeURIComponent(data);
-              localStorage.setItem('protocolHabitData', decodedData);
-              window.dispatchEvent(new CustomEvent('protocolHabitReceived', { 
-                detail: { data: decodedData, platform: 'windows' }
-              }));
-            } catch (error) {
-              console.error('Error processing habit protocol data:', error);
-            }
-          }
-        }
-        
-        if (pathname === '/import') {
-          const data = searchParams.get('data');
-          if (data) {
-            console.log('Windows protocol handler - import data:', data);
-            try {
-              const decodedData = decodeURIComponent(data);
-              localStorage.setItem('protocolImportData', decodedData);
-              window.dispatchEvent(new CustomEvent('protocolImportReceived', { 
-                detail: { data: decodedData, platform: 'windows' }
-              }));
-            } catch (error) {
-              console.error('Error processing import protocol data:', error);
-            }
-          }
-        }
-      }
-      
-      // Windows-specific performance optimizations
-      if (navigator.userAgent.includes('Windows')) {
-        // Preload critical resources
-        const link = document.createElement('link');
-        link.rel = 'prefetch';
-        link.href = '/manifest.json';
-        document.head.appendChild(link);
-        
-        // Windows-specific touch handling
-        if ('ontouchstart' in window) {
-          document.addEventListener('touchstart', function() {}, { passive: true });
-        }
-      }
-      
-      window.addEventListener('load', handleProtocolData);
-      window.addEventListener('popstate', handleProtocolData);
     </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
