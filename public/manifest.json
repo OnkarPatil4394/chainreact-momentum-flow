@@ -128,7 +128,13 @@
   "scope": "/",
   "categories": ["productivity", "lifestyle", "utilities"],
   "prefer_related_applications": false,
-  "related_applications": [],
+  "related_applications": [
+    {
+      "platform": "play",
+      "url": "https://play.google.com/store/apps/details?id=com.chainreact.app",
+      "id": "com.chainreact.app"
+    }
+  ],
   "shortcuts": [
     {
       "name": "Add New Habit",
