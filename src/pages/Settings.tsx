@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
+import PWAUninstall from '../components/PWAUninstall';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge'; // Fixed Badge import
+import { Badge } from '@/components/ui/badge';
 import { db } from '../db/database';
 import { AppSettings } from '../types/types';
 import { useToast } from "@/hooks/use-toast";
-import { playSettingsSound } from '../utils/sounds'; // Import the sound utility
+import { playSettingsSound } from '../utils/sounds';
 import { 
   Save, 
   Download, 
@@ -50,7 +51,6 @@ const Settings = () => {
     setSettings(updatedSettings);
     db.saveSettings(updatedSettings);
     
-    // Play settings sound
     playSettingsSound();
     
     toast({
@@ -70,14 +70,12 @@ const Settings = () => {
     setSettings(updatedSettings);
     db.saveSettings(updatedSettings);
     
-    // Apply dark mode change to the document
     if (updatedSettings.darkMode) {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
     }
     
-    // Play settings sound
     playSettingsSound();
     
     toast({
@@ -94,7 +92,6 @@ const Settings = () => {
     setSettings(updatedSettings);
     db.saveSettings(updatedSettings);
     
-    // Play settings sound for significant changes
     playSettingsSound();
   };
   
@@ -111,7 +108,6 @@ const Settings = () => {
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
       
-      // Play settings sound
       playSettingsSound();
       
       toast({
@@ -141,10 +137,8 @@ const Settings = () => {
         const success = db.importData(jsonData);
         
         if (success) {
-          // Refresh settings after import
           setSettings(db.getSettings());
           
-          // Apply dark mode if needed after import
           const updatedSettings = db.getSettings();
           if (updatedSettings.darkMode) {
             document.documentElement.classList.add('dark');
@@ -152,7 +146,6 @@ const Settings = () => {
             document.documentElement.classList.remove('dark');
           }
           
-          // Play settings sound
           playSettingsSound();
           
           toast({
@@ -180,19 +173,14 @@ const Settings = () => {
     };
     
     reader.readAsText(file);
-    // Reset file input
     e.target.value = '';
   };
   
   const handleResetData = () => {
     if (window.confirm('Are you sure you want to reset all data? This cannot be undone.')) {
-      // Clear all localStorage data
       localStorage.clear();
-      
-      // Reset to default settings
       setSettings(db.getSettings());
       
-      // Play settings sound
       playSettingsSound();
       
       toast({
@@ -203,7 +191,6 @@ const Settings = () => {
     }
   };
   
-  // Link component for settings items
   const SettingsLink = ({ to, icon, title, description }: { to: string, icon: React.ReactNode, title: string, description: string }) => (
     <Link to={to}>
       <div className="flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
@@ -230,6 +217,9 @@ const Settings = () => {
           <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-1">Settings</h2>
           <p className="text-sm text-gray-600 dark:text-gray-400">Customize ChainReact to your preferences</p>
         </div>
+        
+        {/* PWA Management */}
+        <PWAUninstall />
         
         {/* Display options */}
         <Card className="mb-6 p-4 dark:bg-gray-800 dark:border-gray-700">
