@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import PWAUninstall from '../components/PWAUninstall';
@@ -8,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { db } from '../db/database';
+import { secureStorage } from '../utils/secureStorage';
 import { AppSettings } from '../types/types';
 import { useToast } from "@/hooks/use-toast";
 import { playSettingsSound } from '../utils/sounds';
@@ -178,7 +180,8 @@ const Settings = () => {
   
   const handleResetData = () => {
     if (window.confirm('Are you sure you want to reset all data? This cannot be undone.')) {
-      localStorage.clear();
+      // Use secure storage clear method instead of direct localStorage
+      secureStorage.clear();
       setSettings(db.getSettings());
       
       playSettingsSound();
