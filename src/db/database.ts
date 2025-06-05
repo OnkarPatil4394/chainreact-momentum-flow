@@ -224,31 +224,27 @@ class Database {
       return false;
     }
     
-    const habit = chain.habits.find((h) => h.id === habitId);
-    if (!habit) {
+    const targetHabit = chain.habits.find((h) => h.id === habitId);
+    if (!targetHabit) {
       PerformanceMonitor.endTiming('completeHabit');
       return false;
     }
     
     // Check if already completed today
-    if (habit.completed) {
+    if (targetHabit.completed) {
       PerformanceMonitor.endTiming('completeHabit');
       return false;
     }
     
-    // Find the habit
-    const habit = chain.habits.find((h) => h.id === habitId);
-    if (!habit) return false;
-    
     // Check if prerequisites are completed (all habits with lower positions)
-    const prerequisites = chain.habits.filter(h => h.position < habit.position);
+    const prerequisites = chain.habits.filter(h => h.position < targetHabit.position);
     const allPrerequisitesCompleted = prerequisites.every(h => h.completed);
     
     if (!allPrerequisitesCompleted) return false;
     
     // Mark habit as completed
-    habit.completed = true;
-    habit.completedAt = new Date().toISOString();
+    targetHabit.completed = true;
+    targetHabit.completedAt = new Date().toISOString();
     
     // Check if entire chain is completed
     const allCompleted = chain.habits.every(h => h.completed);

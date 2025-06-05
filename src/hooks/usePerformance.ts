@@ -1,5 +1,5 @@
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { PerformanceMonitor } from '../utils/performance';
 
 // Hook for monitoring component performance
