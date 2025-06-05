@@ -2,6 +2,7 @@ import { Habit, HabitChain, UserStats, Badge, AppSettings } from "../types/types
 import { sanitizeInput, validateInput, safeJsonParse, validateImportData, rateLimit } from "../utils/security";
 import { secureStorage } from "../utils/secureStorage";
 import { generateSecureId, validateId } from "../utils/secureId";
+import { PerformanceMonitor } from "../utils/performance";
 
 // Initialize default data
 const initialStats: UserStats = {
@@ -76,16 +77,20 @@ const initialSettings: AppSettings = {
   reminderTime: "09:00"
 };
 
-// Database operations
+// Database operations with performance monitoring
 class Database {
-  // Store habit chains with secure storage
+  // Store habit chains with secure storage and performance monitoring
   saveChains(chains: HabitChain[]): void {
+    PerformanceMonitor.startTiming('saveChains');
     secureStorage.setItem("chains", chains);
+    PerformanceMonitor.endTiming('saveChains');
   }
 
   getChains(): HabitChain[] {
-    const chains = secureStorage.getItem<HabitChain[]>("chains");
-    return chains || [];
+    PerformanceMonitor.startTiming('getChains');
+    const chains = secureStorage.getItem<HabitChain[]>("chains") || [];
+    PerformanceMonitor.endTiming('getChains');
+    return chains;
   }
 
   // Get a specific chain with ID validation
@@ -99,46 +104,74 @@ class Database {
     return chain || null;
   }
 
-  // Create new chain with security validation
+  // Enhanced chain creation with stricter validation
   addChain(chain: HabitChain): void {
-    if (!rateLimit('addChain', 5, 60000)) {
+    if (!rateLimit('addChain', 3, 60000)) {
       throw new Error('Rate limit exceeded for chain creation');
     }
     
-    // Sanitize inputs
-    const sanitizedChain = {
-      ...chain,
-      name: sanitizeInput(chain.name),
-      description: sanitizeInput(chain.description || ''),
-      habits: chain.habits.map(h => ({
-        ...h,
-        name: sanitizeInput(h.name),
-        description: sanitizeInput(h.description || '')
-      }))
-    };
+    PerformanceMonitor.startTiming('addChain');
     
-    // Validate inputs
-    if (!validateInput(sanitizedChain.name, 100)) {
-      throw new Error('Invalid chain name');
-    }
+    // Enhanced sanitization
+    const sanitizedChain = this.sanitizeChainData(chain);
     
-    if (sanitizedChain.description && !validateInput(sanitizedChain.description, 500)) {
-      throw new Error('Invalid chain description');
-    }
-    
-    for (const habit of sanitizedChain.habits) {
-      if (!validateInput(habit.name, 100)) {
-        throw new Error('Invalid habit name');
-      }
-      if (habit.description && !validateInput(habit.description, 200)) {
-        throw new Error('Invalid habit description');
-      }
-    }
+    // Enhanced validation
+    this.validateChainData(sanitizedChain);
     
     const chains = this.getChains();
+    
+    // Check for duplicate names
+    if (chains.some(c => c.name.toLowerCase() === sanitizedChain.name.toLowerCase())) {
+      throw new Error('Chain name already exists');
+    }
+    
     chains.push(sanitizedChain);
     this.saveChains(chains);
     this.checkBadges();
+    
+    PerformanceMonitor.endTiming('addChain');
+  }
+
+  // Sanitize chain data
+  private sanitizeChainData(chain: HabitChain): HabitChain {
+    return {
+      ...chain,
+      name: sanitizeInput(chain.name, { maxLength: 100 }),
+      description: sanitizeInput(chain.description || '', { maxLength: 500 }),
+      habits: chain.habits.map(h => ({
+        ...h,
+        name: sanitizeInput(h.name, { maxLength: 100 }),
+        description: sanitizeInput(h.description || '', { maxLength: 200 })
+      }))
+    };
+  }
+
+  // Validate chain data
+  private validateChainData(chain: HabitChain): void {
+    if (!validateInput(chain.name, 100)) {
+      throw new Error('Invalid chain name');
+    }
+    
+    if (chain.description && !validateInput(chain.description, 500)) {
+      throw new Error('Invalid chain description');
+    }
+    
+    if (chain.habits.length === 0) {
+      throw new Error('Chain must have at least one habit');
+    }
+    
+    if (chain.habits.length > 10) {
+      throw new Error('Chain cannot have more than 10 habits');
+    }
+    
+    for (const habit of chain.habits) {
+      if (!validateInput(habit.name, 100)) {
+        throw new Error(`Invalid habit name: ${habit.name}`);
+      }
+      if (habit.description && !validateInput(habit.description, 200)) {
+        throw new Error(`Invalid habit description: ${habit.description}`);
+      }
+    }
   }
 
   // Update existing chain with security validation
@@ -181,10 +214,27 @@ class Database {
       return false;
     }
 
+    PerformanceMonitor.startTiming('completeHabit');
+    
     const chains = this.getChains();
     const chain = chains.find((c) => c.id === chainId);
     
-    if (!chain) return false;
+    if (!chain) {
+      PerformanceMonitor.endTiming('completeHabit');
+      return false;
+    }
+    
+    const habit = chain.habits.find((h) => h.id === habitId);
+    if (!habit) {
+      PerformanceMonitor.endTiming('completeHabit');
+      return false;
+    }
+    
+    // Check if already completed today
+    if (habit.completed) {
+      PerformanceMonitor.endTiming('completeHabit');
+      return false;
+    }
     
     // Find the habit
     const habit = chain.habits.find((h) => h.id === habitId);
@@ -244,6 +294,8 @@ class Database {
     
     this.updateChain(chain);
     this.checkBadges();
+    
+    PerformanceMonitor.endTiming('completeHabit');
     
     return true;
   }
@@ -328,20 +380,30 @@ class Database {
     this.saveStats(stats);
   }
 
-  // Enhanced secure export with integrity checksums
+  // Enhanced secure export with compression and integrity
   exportData(): string {
+    PerformanceMonitor.startTiming('exportData');
+    
     const data = {
       userName: sanitizeInput(this.getUserName()),
       chains: this.getChains(),
       stats: this.getStats(),
       settings: this.getSettings(),
       exportedAt: new Date().toISOString(),
-      version: '2.0',
+      version: '2.1',
       integrity: true
     };
     
     const jsonData = JSON.stringify(data);
+    
+    // Add size validation
+    if (jsonData.length > 10 * 1024 * 1024) { // 10MB limit
+      throw new Error('Export data too large');
+    }
+    
     const checksum = this.calculateDataChecksum(jsonData);
+    
+    PerformanceMonitor.endTiming('exportData');
     
     return JSON.stringify({
       ...data,
@@ -359,13 +421,20 @@ class Database {
     return Math.abs(hash).toString(16);
   }
 
-  // Enhanced secure import with integrity verification
+  // Enhanced secure import with better validation
   importData(jsonData: string): boolean {
-    if (!rateLimit('importData', 3, 300000)) {
+    if (!rateLimit('importData', 2, 300000)) {
       throw new Error('Rate limit exceeded for data imports');
     }
     
+    PerformanceMonitor.startTiming('importData');
+    
     try {
+      // Size check
+      if (jsonData.length > 10 * 1024 * 1024) {
+        throw new Error('Import data too large');
+      }
+      
       const importedData = safeJsonParse<{
         userName?: string;
         chains: any[];
@@ -375,13 +444,13 @@ class Database {
         version: string;
         checksum?: string;
         integrity?: boolean;
-      }>(jsonData);
+      }>(jsonData, 10 * 1024 * 1024);
       
       if (!importedData || !validateImportData(importedData)) {
         throw new Error('Invalid import data structure');
       }
 
-      // Verify data integrity if checksum is present
+      // Enhanced integrity verification
       if (importedData.checksum && importedData.integrity) {
         const dataForChecksum = JSON.stringify({
           ...importedData,
@@ -394,30 +463,27 @@ class Database {
         }
       }
 
-      // Sanitize all text fields before saving
-      const sanitizedChains = importedData.chains.map((chain: any) => ({
-        ...chain,
-        name: sanitizeInput(chain.name),
-        description: sanitizeInput(chain.description || ''),
-        habits: chain.habits.map((h: any) => ({
-          ...h,
-          name: sanitizeInput(h.name),
-          description: sanitizeInput(h.description || '')
-        }))
-      }));
+      // Enhanced sanitization
+      const sanitizedChains = importedData.chains.map((chain: any) => 
+        this.sanitizeChainData(chain)
+      );
+      
+      // Validate all chains before saving
+      sanitizedChains.forEach(chain => this.validateChainData(chain));
       
       this.saveChains(sanitizedChains);
       this.saveStats(importedData.stats);
       this.saveSettings(importedData.settings);
       
-      // Import user name if available
       if (importedData.userName) {
         this.saveUserName(sanitizeInput(importedData.userName));
       }
       
+      PerformanceMonitor.endTiming('importData');
       return true;
     } catch (e) {
       console.error("Failed to import data:", e);
+      PerformanceMonitor.endTiming('importData');
       return false;
     }
   }
