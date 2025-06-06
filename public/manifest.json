@@ -18,6 +18,10 @@
     "preferred_width": 400
   },
   "handle_links": "preferred",
+  "permissions": [
+    "background-sync",
+    "periodic-background-sync"
+  ],
   "file_handlers": [
     {
       "action": "/import",

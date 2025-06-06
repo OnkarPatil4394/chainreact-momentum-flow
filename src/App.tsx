@@ -11,9 +11,10 @@ import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import LoadingScreen from "./components/LoadingScreen";
 import WelcomeScreen from "./components/WelcomeScreen";
-import StreakCelebration from "./components/StreakCelebration"; // Import streak celebration component
+import StreakCelebration from "./components/StreakCelebration";
 import { db } from "./db/database";
-import { playStreakSound } from "./utils/sounds"; // Import sound utility
+import { playStreakSound } from "./utils/sounds";
+import { backgroundSync } from "./utils/backgroundSync"; // Import background sync utility
 
 // Legal & Info pages
 import PrivacyPolicy from "./components/legal/PrivacyPolicy";
@@ -48,6 +49,20 @@ const App = () => {
     } else {
       document.documentElement.classList.remove('dark');
     }
+    
+    // Initialize background sync
+    backgroundSync.init();
+    console.log('Background sync support:', backgroundSync.isSupported());
+    console.log('Periodic sync support:', backgroundSync.isPeriodicSyncSupported());
+    
+    // Listen for sync events
+    window.addEventListener('sync-complete', () => {
+      console.log('Sync completed - UI can be refreshed');
+    });
+    
+    window.addEventListener('app-updated', () => {
+      console.log('App updated in background');
+    });
     
     // Check if this is the first time opening the app
     const isFirstTime = db.isFirstTimeUser();
@@ -103,7 +118,7 @@ const App = () => {
         <Toaster />
         <Sonner 
           className="dark:bg-gray-800 dark:text-white"
-          toastOptions={{ duration: 3000 }} // Set duration to 3 seconds
+          toastOptions={{ duration: 3000 }}
         />
         
         {isLoading ? (
