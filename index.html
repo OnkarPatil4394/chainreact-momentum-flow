@@ -1,4 +1,5 @@
 
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -10,11 +11,11 @@
     <!-- Relaxed Security Headers for Development -->
     <meta http-equiv="Content-Security-Policy" content="
       default-src 'self' https://onkarpatil4394.github.io https://b32626aa-f522-4b29-97f5-9c8342dadcb5.lovableproject.com;
-      script-src 'self' 'unsafe-eval' 'unsafe-inline';
+      script-src 'self' 'unsafe-eval' 'unsafe-inline' https://static.cloudflareinsights.com;
       style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
       font-src 'self' https://fonts.gstatic.com data:;
       img-src 'self' https://onkarpatil4394.github.io data: blob:;
-      connect-src 'self' https://api.github.com https://fonts.googleapis.com https://fonts.gstatic.com;
+      connect-src 'self' https://api.github.com https://fonts.googleapis.com https://fonts.gstatic.com https://cloudflareinsights.com;
       worker-src 'self';
       manifest-src 'self';
       base-uri 'self';
@@ -69,3 +70,4 @@
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
+
