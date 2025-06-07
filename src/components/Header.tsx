@@ -1,4 +1,7 @@
 
+/**
+ * © 2025 Vaion Developers. ChainReact — Free Forever, Not Yours to Rebrand.
+ */
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -11,7 +14,7 @@ const Header = () => {
   useEffect(() => {
     // Update active tab based on current path
     const path = location.pathname;
-    if (path === '/') {
+    if (path === '/app') {
       setActiveTab('home');
     } else if (path === '/stats') {
       setActiveTab('stats');
@@ -25,7 +28,7 @@ const Header = () => {
       <div className="container mx-auto px-4 py-4">
         {/* Navigation tabs */}
         <div className="flex items-center justify-between">
-          <Link to="/">
+          <Link to="/app">
             <Button
               variant={activeTab === 'home' ? 'default' : 'ghost'}
               size="sm"
