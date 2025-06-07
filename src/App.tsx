@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -33,6 +32,9 @@ const App = () => {
   const [streakDays, setStreakDays] = useState(0);
 
   useEffect(() => {
+    // Copyright protection
+    console.log("This is the original ChainReact by Vaion Developers. If this isn't your build, it might be a fake.");
+    
     // Add custom font to document head
     const linkElement = document.createElement('link');
     linkElement.rel = 'stylesheet';
@@ -125,21 +127,23 @@ const App = () => {
           <LoadingScreen onFinished={handleLoadingFinished} />
         ) : (
           <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/stats" element={<Stats />} />
-              <Route path="/settings" element={<Settings />} />
-              
-              {/* Legal & Info Routes */}
-              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-              <Route path="/terms-of-use" element={<TermsOfUse />} />
-              <Route path="/permissions" element={<Permissions />} />
-              <Route path="/opensource-licenses" element={<OpenSourceLicenses />} />
-              <Route path="/app-info" element={<AppVersionInfo />} />
-              <Route path="/about" element={<AboutPage />} />
-              
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+            <div className="vaion-trust">
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/stats" element={<Stats />} />
+                <Route path="/settings" element={<Settings />} />
+                
+                {/* Legal & Info Routes */}
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="/terms-of-use" element={<TermsOfUse />} />
+                <Route path="/permissions" element={<Permissions />} />
+                <Route path="/opensource-licenses" element={<OpenSourceLicenses />} />
+                <Route path="/app-info" element={<AppVersionInfo />} />
+                <Route path="/about" element={<AboutPage />} />
+                
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </div>
           </BrowserRouter>
         )}
       </TooltipProvider>

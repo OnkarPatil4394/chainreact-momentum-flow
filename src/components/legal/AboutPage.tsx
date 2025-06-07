@@ -1,8 +1,11 @@
 
+/**
+ * © 2025 Vaion Developers. ChainReact — Free Forever, Not Yours to Rebrand.
+ */
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Heart, Mail } from 'lucide-react';
+import { ArrowLeft, Heart, Mail, Shield } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const AboutPage = () => {
@@ -13,7 +16,7 @@ const AboutPage = () => {
   const contactEmail = "vaiondevelopers@gmail.com";
 
   return (
-    <div className="container mx-auto px-4 py-6">
+    <div className="container mx-auto px-4 py-6 vaion-trust">
       <div className="flex items-center mb-6">
         <Button 
           variant="ghost" 
@@ -48,11 +51,22 @@ const AboutPage = () => {
               external servers or shares your information with third parties.
             </p>
             
-            <div className="flex justify-center">
+            <div className="flex justify-center mb-4">
               <div className="inline-flex items-center text-blue-600 text-sm">
                 <Heart size={16} className="mr-1" /> 
                 <span>Created by {developerName}</span>
               </div>
+            </div>
+
+            {/* Trust building message */}
+            <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
+              <div className="flex items-center text-green-700 text-sm font-medium mb-1">
+                <Shield size={16} className="mr-2" />
+                Built by Vaion Developers — Free Forever
+              </div>
+              <p className="text-green-600 text-xs">
+                No ads. No tracking. No nonsense. Always free.
+              </p>
             </div>
           </div>
           

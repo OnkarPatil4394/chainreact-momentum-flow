@@ -1,3 +1,6 @@
+/**
+ * © 2025 Vaion Developers. ChainReact — Free Forever, Not Yours to Rebrand.
+ */
 
 // Background Sync Utility for ChainReact
 export class BackgroundSync {

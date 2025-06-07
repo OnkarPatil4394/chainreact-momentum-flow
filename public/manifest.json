@@ -1,8 +1,8 @@
-
 {
   "name": "ChainReact - Build momentum. One habit at a time.",
   "short_name": "ChainReact",
-  "description": "A minimalist, gamified habit tracker built to run 100% offline",
+  "description": "ChainReact — built with care by Vaion Developers. No ads. No tracking. No nonsense.",
+  "author": "Vaion Developers",
   "start_url": "/",
   "id": "/",
   "display": "standalone",

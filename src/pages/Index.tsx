@@ -1,4 +1,6 @@
-
+/**
+ * © 2025 Vaion Developers. ChainReact — Free Forever, Not Yours to Rebrand.
+ */
 import React, { useState, useEffect } from 'react';
 import { db } from '../db/database';
 import { HabitChain as HabitChainType } from '../types/types';
@@ -7,6 +9,7 @@ import HabitChain from '../components/HabitChain';
 import ProgressSection from '../components/ProgressSection';
 import CreateHabitModal from '../components/CreateHabitModal';
 import HowToUse from '../components/HowToUse';
+import Footer from '../components/Footer';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 
@@ -52,10 +55,10 @@ const Index = () => {
   });
   
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pb-16">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 vaion-trust">
       <Header />
       
-      <main className="container mx-auto px-4 py-6">
+      <main className="container mx-auto px-4 py-6 pb-20">
         {/* Today's date */}
         <div className="mb-4">
           <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">{currentDate}</h2>
@@ -100,6 +103,8 @@ const Index = () => {
           </div>
         )}
       </main>
+      
+      <Footer />
       
       {/* Create/Edit habit modal */}
       <CreateHabitModal 

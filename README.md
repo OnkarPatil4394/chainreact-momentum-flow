@@ -1,8 +1,23 @@
-# Welcome to your Lovable project
+
+# ChainReact - Build momentum. One habit at a time.
+
+© 2025 Vaion Developers. ChainReact — Free Forever, Not Yours to Rebrand.
 
 ## Project info
 
 **URL**: https://lovable.dev/projects/b32626aa-f522-4b29-97f5-9c8342dadcb5
+
+ChainReact is a 100% free, offline-first habit tracking PWA built with care by Vaion Developers. No ads. No tracking. No nonsense.
+
+## 🚫 DMCA Protection Notice
+
+This app is protected. Any unauthorized rebranding, cloning, or republishing will result in a takedown via DMCA.
+
+## License
+
+This work is licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License.
+
+See [LICENSE](LICENSE) for full details.
 
 ## How can I edit this code?
 
@@ -71,3 +86,7 @@ Yes, you can!
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+
+---
+
+**Built by Vaion Developers — Free Forever. No ads. No tracking.**
