@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -12,8 +13,7 @@ import LoadingScreen from "./components/LoadingScreen";
 import WelcomeScreen from "./components/WelcomeScreen";
 import StreakCelebration from "./components/StreakCelebration";
 import { db } from "./db/database";
-import { playStreakSound } from "./utils/sounds";
-import { backgroundSync } from "./utils/backgroundSync"; // Import background sync utility
+import { backgroundSync } from "./utils/backgroundSync";
 
 // Legal & Info pages
 import PrivacyPolicy from "./components/legal/PrivacyPolicy";
@@ -32,64 +32,83 @@ const App = () => {
   const [streakDays, setStreakDays] = useState(0);
 
   useEffect(() => {
-    // Copyright protection
-    console.log("This is the original ChainReact by Vaion Developers. If this isn't your build, it might be a fake.");
-    
-    // Add custom font to document head
-    const linkElement = document.createElement('link');
-    linkElement.rel = 'stylesheet';
-    linkElement.href = 'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap';
-    document.head.appendChild(linkElement);
-    
-    // Apply font to body
-    document.body.classList.add('font-poppins');
-    
-    // Apply dark mode if enabled in settings
-    const settings = db.getSettings();
-    if (settings.darkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-    
-    // Initialize background sync
-    backgroundSync.init();
-    console.log('Background sync support:', backgroundSync.isSupported());
-    console.log('Periodic sync support:', backgroundSync.isPeriodicSyncSupported());
-    
-    // Listen for sync events
-    window.addEventListener('sync-complete', () => {
-      console.log('Sync completed - UI can be refreshed');
-    });
-    
-    window.addEventListener('app-updated', () => {
-      console.log('App updated in background');
-    });
-    
-    // Check if this is the first time opening the app
-    const isFirstTime = db.isFirstTimeUser();
-    if (isFirstTime) {
-      setShowWelcome(true);
-    } else {
-      // Check for streak celebration
-      checkForStreakCelebration();
-    }
+    const initializeApp = async () => {
+      try {
+        // Copyright protection
+        console.log("This is the original ChainReact by Vaion Developers. If this isn't your build, it might be a fake.");
+        
+        // Add custom font to document head
+        const linkElement = document.createElement('link');
+        linkElement.rel = 'stylesheet';
+        linkElement.href = 'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap';
+        document.head.appendChild(linkElement);
+        
+        // Apply font to body
+        document.body.classList.add('font-poppins');
+        
+        // Apply dark mode if enabled in settings
+        const settings = db.getSettings();
+        if (settings.darkMode) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+        
+        // Initialize background sync
+        backgroundSync.init();
+        console.log('Background sync support:', backgroundSync.isSupported());
+        console.log('Periodic sync support:', backgroundSync.isPeriodicSyncSupported());
+        
+        // Listen for sync events
+        window.addEventListener('sync-complete', () => {
+          console.log('Sync completed - UI can be refreshed');
+        });
+        
+        window.addEventListener('app-updated', () => {
+          console.log('App updated in background');
+        });
+        
+        // Check if this is the first time opening the app
+        const isFirstTime = db.isFirstTimeUser();
+        if (isFirstTime) {
+          setShowWelcome(true);
+        } else {
+          // Check for streak celebration
+          checkForStreakCelebration();
+        }
+        
+        // Small delay to ensure everything is initialized
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 1000);
+        
+      } catch (error) {
+        console.error('Error initializing app:', error);
+        setIsLoading(false);
+      }
+    };
+
+    initializeApp();
   }, []);
 
   // Function to check if we should show streak celebration
   const checkForStreakCelebration = () => {
-    const stats = db.getStats();
-    const lastVisitDate = localStorage.getItem('lastVisitDate');
-    const today = new Date().toISOString().split('T')[0];
-    
-    // Check if it's a new day since last visit
-    if (lastVisitDate && lastVisitDate !== today && stats.streakDays > 0) {
-      setStreakDays(stats.streakDays);
-      setShowStreakCelebration(true);
+    try {
+      const stats = db.getStats();
+      const lastVisitDate = localStorage.getItem('lastVisitDate');
+      const today = new Date().toISOString().split('T')[0];
+      
+      // Check if it's a new day since last visit
+      if (lastVisitDate && lastVisitDate !== today && stats.streakDays > 0) {
+        setStreakDays(stats.streakDays);
+        setShowStreakCelebration(true);
+      }
+      
+      // Update last visit date
+      localStorage.setItem('lastVisitDate', today);
+    } catch (error) {
+      console.error('Error checking streak celebration:', error);
     }
-    
-    // Update last visit date
-    localStorage.setItem('lastVisitDate', today);
   };
 
   const handleLoadingFinished = () => {
@@ -127,7 +146,7 @@ const App = () => {
           <LoadingScreen onFinished={handleLoadingFinished} />
         ) : (
           <BrowserRouter>
-            <div className="vaion-trust">
+            <div className="vaion-trust min-h-screen">
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/stats" element={<Stats />} />
