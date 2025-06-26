@@ -24,8 +24,8 @@ import {
   Shield,
   Info,
   Code2,
-  HelpCircle,
-  Coffee,
+  Settings as SettingsIcon,
+  Palette,
   Bell
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -215,24 +215,32 @@ const Settings = () => {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pb-16">
       <Header />
       
-      <main className="container mx-auto px-4 py-6">
-        <div className="mb-6">
-          <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-1">Settings</h2>
+      <main className="container mx-auto px-4 py-6 max-w-2xl">
+        <div className="mb-8">
+          <div className="flex items-center mb-2">
+            <SettingsIcon className="mr-3 text-blue-600 dark:text-blue-400" size={24} />
+            <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100">Settings</h2>
+          </div>
           <p className="text-sm text-gray-600 dark:text-gray-400">Customize ChainReact to your preferences</p>
         </div>
         
         {/* PWA Management */}
-        <PWAUninstall />
+        <div className="mb-6">
+          <PWAUninstall />
+        </div>
         
-        {/* Display options */}
-        <Card className="mb-6 p-4 dark:bg-gray-800 dark:border-gray-700">
-          <h3 className="text-base font-medium text-gray-800 dark:text-gray-200 mb-4">Display Options</h3>
-          
-          <div className="space-y-4">
+        {/* Appearance */}
+        <Card className="mb-6 dark:bg-gray-800 dark:border-gray-700">
+          <div className="p-6">
+            <div className="flex items-center mb-4">
+              <Palette className="mr-3 text-purple-600 dark:text-purple-400" size={20} />
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">Appearance</h3>
+            </div>
+            
             <div className="flex items-center justify-between">
               <div>
                 <Label htmlFor="darkMode" className="text-sm font-medium">Dark Mode</Label>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Use dark theme throughout the app</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Use dark theme throughout the app</p>
               </div>
               <Switch 
                 id="darkMode"
@@ -244,59 +252,67 @@ const Settings = () => {
         </Card>
         
         {/* Notifications */}
-        <Card className="mb-6 p-4 dark:bg-gray-800 dark:border-gray-700">
-          <h3 className="text-base font-medium text-gray-800 dark:text-gray-200 mb-4">Notifications</h3>
-          
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <Label htmlFor="notifications" className="text-sm font-medium">Enable Reminders</Label>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Get reminders for your habits</p>
-              </div>
-              <Switch 
-                id="notifications"
-                checked={settings.notificationsEnabled}
-                onCheckedChange={handleToggleNotifications}
-              />
+        <Card className="mb-6 dark:bg-gray-800 dark:border-gray-700">
+          <div className="p-6">
+            <div className="flex items-center mb-4">
+              <Bell className="mr-3 text-green-600 dark:text-green-400" size={20} />
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">Notifications</h3>
             </div>
             
-            {settings.notificationsEnabled && (
-              <div>
-                <Label htmlFor="reminderTime" className="text-sm font-medium">Reminder Time</Label>
-                <Input
-                  id="reminderTime"
-                  type="time"
-                  value={settings.reminderTime}
-                  onChange={handleTimeChange}
-                  className="mt-1 dark:bg-gray-700 dark:border-gray-600"
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label htmlFor="notifications" className="text-sm font-medium">Enable Reminders</Label>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Get reminders for your habits</p>
+                </div>
+                <Switch 
+                  id="notifications"
+                  checked={settings.notificationsEnabled}
+                  onCheckedChange={handleToggleNotifications}
                 />
               </div>
-            )}
+              
+              {settings.notificationsEnabled && (
+                <div className="pt-2">
+                  <Label htmlFor="reminderTime" className="text-sm font-medium">Reminder Time</Label>
+                  <Input
+                    id="reminderTime"
+                    type="time"
+                    value={settings.reminderTime}
+                    onChange={handleTimeChange}
+                    className="mt-2 dark:bg-gray-700 dark:border-gray-600"
+                  />
+                </div>
+              )}
+            </div>
           </div>
         </Card>
         
         {/* Data Management */}
-        <Card className="mb-6 p-4 dark:bg-gray-800 dark:border-gray-700">
-          <h3 className="text-base font-medium text-gray-800 dark:text-gray-200 mb-4">Data Management</h3>
-          
-          <div className="space-y-4">
-            <div className="flex flex-col space-y-2">
-              <Label htmlFor="exportData" className="text-sm font-medium">Export Data</Label>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Save a backup of your habits and progress</p>
-              <Button 
-                onClick={handleExportData}
-                variant="outline"
-                className="flex items-center dark:border-gray-600 dark:hover:bg-gray-700"
-              >
-                <Download size={16} className="mr-2" />
-                Export Data
-              </Button>
+        <Card className="mb-6 dark:bg-gray-800 dark:border-gray-700">
+          <div className="p-6">
+            <div className="flex items-center mb-4">
+              <Download className="mr-3 text-blue-600 dark:text-blue-400" size={20} />
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">Data Management</h3>
             </div>
             
-            <div className="flex flex-col space-y-2">
-              <Label htmlFor="importData" className="text-sm font-medium">Import Data</Label>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Restore from a previous backup</p>
-              <div className="flex items-center">
+            <div className="space-y-4">
+              <div>
+                <Label className="text-sm font-medium">Export Data</Label>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">Save a backup of your habits and progress</p>
+                <Button 
+                  onClick={handleExportData}
+                  variant="outline"
+                  className="w-full dark:border-gray-600 dark:hover:bg-gray-700"
+                >
+                  <Download size={16} className="mr-2" />
+                  Export Data
+                </Button>
+              </div>
+              
+              <div>
+                <Label className="text-sm font-medium">Import Data</Label>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">Restore from a previous backup</p>
                 <input
                   type="file"
                   id="importData"
@@ -307,21 +323,20 @@ const Settings = () => {
                 <Button 
                   onClick={() => document.getElementById('importData')?.click()}
                   variant="outline"
-                  className="flex items-center dark:border-gray-600 dark:hover:bg-gray-700"
+                  className="w-full dark:border-gray-600 dark:hover:bg-gray-700"
                 >
                   <Upload size={16} className="mr-2" />
                   Import Data
                 </Button>
               </div>
-            </div>
-            
-            <div className="pt-2">
-              <div className="flex flex-col space-y-2">
+              
+              <div className="pt-4 border-t border-gray-100 dark:border-gray-700">
                 <Label className="text-sm font-medium text-red-600 dark:text-red-400">Danger Zone</Label>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">This action cannot be undone</p>
                 <Button 
                   onClick={handleResetData}
                   variant="outline"
-                  className="border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 flex items-center dark:border-red-900 dark:text-red-400 dark:hover:bg-red-950"
+                  className="w-full border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 dark:border-red-900 dark:text-red-400 dark:hover:bg-red-950"
                 >
                   <Trash size={16} className="mr-2" />
                   Reset All Data
@@ -331,90 +346,85 @@ const Settings = () => {
           </div>
         </Card>
         
-        {/* Permissions */}
+        {/* Privacy & Legal */}
         <Card className="mb-6 dark:bg-gray-800 dark:border-gray-700">
-          <SettingsLink 
-            to="/permissions"
-            icon={<Shield size={20} />}
-            title="Permissions"
-            description="Manage app permissions and privacy settings"
-          />
-        </Card>
-        
-        {/* Legal & Info */}
-        <Card className="mb-6 dark:bg-gray-800 dark:border-gray-700">
-          <h3 className="text-base font-medium text-gray-800 dark:text-gray-200 px-4 pt-4 pb-2">Legal & Info</h3>
-          
-          <div className="border-t border-gray-100 dark:border-gray-700">
-            <SettingsLink 
-              to="/privacy-policy"
-              icon={<FileText size={20} />}
-              title="Privacy Policy"
-              description="How we handle your data and privacy"
-            />
+          <div className="p-4">
+            <div className="flex items-center mb-3 px-2">
+              <Shield className="mr-3 text-orange-600 dark:text-orange-400" size={20} />
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">Privacy & Legal</h3>
+            </div>
             
-            <SettingsLink 
-              to="/terms-of-use"
-              icon={<FileText size={20} />}
-              title="Terms of Use"
-              description="Terms and conditions for using ChainReact"
-            />
-            
-            <SettingsLink 
-              to="/opensource-licenses"
-              icon={<Code2 size={20} />}
-              title="Open Source Credits"
-              description="Acknowledgments for libraries and tools used"
-            />
-            
-            <SettingsLink 
-              to="/app-info"
-              icon={<Info size={20} />}
-              title="App Version & Info"
-              description="Version number and developer information"
-            />
+            <div className="space-y-1">
+              <SettingsLink 
+                to="/permissions"
+                icon={<Shield size={18} />}
+                title="Permissions"
+                description="Manage app permissions and privacy settings"
+              />
+              
+              <SettingsLink 
+                to="/privacy-policy"
+                icon={<FileText size={18} />}
+                title="Privacy Policy"
+                description="How we handle your data and privacy"
+              />
+              
+              <SettingsLink 
+                to="/terms-of-use"
+                icon={<FileText size={18} />}
+                title="Terms of Use"
+                description="Terms and conditions for using ChainReact"
+              />
+            </div>
           </div>
         </Card>
         
-        {/* Buy Me a Coffee */}
+        {/* Developer Info */}
         <Card className="mb-6 dark:bg-gray-800 dark:border-gray-700">
-          <a 
-            href="https://buymeacoffee.com/patilonkar" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors"
-          >
-            <div className="flex items-start">
-              <div className="h-8 w-8 flex items-center justify-center text-amber-500 dark:text-amber-400 mr-3">
-                <Coffee size={20} />
-              </div>
-              <div>
-                <h3 className="text-base font-medium text-gray-800 dark:text-gray-200">Buy Me a Coffee</h3>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Support the development of ChainReact</p>
-              </div>
+          <div className="p-4">
+            <div className="flex items-center mb-3 px-2">
+              <Info className="mr-3 text-gray-600 dark:text-gray-400" size={20} />
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">Developer Info</h3>
             </div>
-            <ChevronRight size={18} className="text-gray-400 dark:text-gray-500" />
-          </a>
+            
+            <div className="space-y-1">
+              <SettingsLink 
+                to="/opensource-licenses"
+                icon={<Code2 size={18} />}
+                title="Open Source Credits"
+                description="Acknowledgments for libraries and tools used"
+              />
+              
+              <SettingsLink 
+                to="/app-info"
+                icon={<Info size={18} />}
+                title="App Version & Info"
+                description="Version number and developer information"
+              />
+            </div>
+          </div>
         </Card>
         
         {/* About */}
-        <Card className="p-4 dark:bg-gray-800 dark:border-gray-700">
-          <h3 className="text-base font-medium text-gray-800 dark:text-gray-200 mb-2">About ChainReact</h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">A minimalist, gamified habit tracker built to run 100% offline</p>
-          
-          <div className="bg-blue-50 border border-blue-100 rounded-lg p-3 flex items-start dark:bg-blue-900/30 dark:border-blue-900">
-            <AlertCircle size={18} className="text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
-            <p className="text-xs text-blue-700 dark:text-blue-300 leading-relaxed">
-              All your data is stored locally on your device. No internet connection is required, and your information is never sent to any server.
-            </p>
-          </div>
-          
-          <div className="text-center mt-6">
-            <p className="text-xs text-gray-500 dark:text-gray-400 flex items-center justify-center gap-1">
-              ChainReact v1.0.0
-              <Badge className="bg-blue-500 text-white text-[10px] h-4">Beta</Badge>
-            </p>
-            <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">Build momentum. One habit at a time.</p>
+        <Card className="p-6 dark:bg-gray-800 dark:border-gray-700">
+          <div className="text-center">
+            <h3 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-2">About ChainReact</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">A minimalist, gamified habit tracker built to run 100% offline</p>
+            
+            <div className="bg-blue-50 border border-blue-100 rounded-lg p-4 flex items-start dark:bg-blue-900/30 dark:border-blue-900 mb-6">
+              <AlertCircle size={18} className="text-blue-500 mr-3 mt-0.5 flex-shrink-0" />
+              <p className="text-xs text-blue-700 dark:text-blue-300 leading-relaxed text-left">
+                All your data is stored locally on your device. No internet connection is required, and your information is never sent to any server.
+              </p>
+            </div>
+            
+            <div>
+              <p className="text-sm text-gray-500 dark:text-gray-400 flex items-center justify-center gap-2 mb-2">
+                ChainReact v1.0.0
+                <Badge className="bg-blue-500 text-white text-[10px] h-4">Beta</Badge>
+              </p>
+              <p className="text-xs text-gray-400 dark:text-gray-500">Build momentum. One habit at a time.</p>
+            </div>
           </div>
         </Card>
       </main>
