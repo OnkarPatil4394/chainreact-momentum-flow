@@ -180,7 +180,6 @@ const Settings = () => {
   
   const handleResetData = () => {
     if (window.confirm('Are you sure you want to reset all data? This cannot be undone.')) {
-      // Use secure storage clear method instead of direct localStorage
       secureStorage.clear();
       setSettings(db.getSettings());
       
@@ -224,14 +223,12 @@ const Settings = () => {
           <p className="text-sm text-gray-600 dark:text-gray-400">Customize ChainReact to your preferences</p>
         </div>
         
-        {/* PWA Management */}
-        <div className="mb-6">
+        <div className="space-y-6">
+          {/* PWA Management */}
           <PWAUninstall />
-        </div>
-        
-        {/* Appearance */}
-        <Card className="mb-6 dark:bg-gray-800 dark:border-gray-700">
-          <div className="p-6">
+          
+          {/* Appearance */}
+          <Card className="p-6 dark:bg-gray-800 dark:border-gray-700">
             <div className="flex items-center mb-4">
               <Palette className="mr-3 text-purple-600 dark:text-purple-400" size={20} />
               <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">Appearance</h3>
@@ -248,12 +245,10 @@ const Settings = () => {
                 onCheckedChange={handleToggleDarkMode}
               />
             </div>
-          </div>
-        </Card>
-        
-        {/* Notifications */}
-        <Card className="mb-6 dark:bg-gray-800 dark:border-gray-700">
-          <div className="p-6">
+          </Card>
+          
+          {/* Notifications */}
+          <Card className="p-6 dark:bg-gray-800 dark:border-gray-700">
             <div className="flex items-center mb-4">
               <Bell className="mr-3 text-green-600 dark:text-green-400" size={20} />
               <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">Notifications</h3>
@@ -285,12 +280,10 @@ const Settings = () => {
                 </div>
               )}
             </div>
-          </div>
-        </Card>
-        
-        {/* Data Management */}
-        <Card className="mb-6 dark:bg-gray-800 dark:border-gray-700">
-          <div className="p-6">
+          </Card>
+          
+          {/* Data Management */}
+          <Card className="p-6 dark:bg-gray-800 dark:border-gray-700">
             <div className="flex items-center mb-4">
               <Download className="mr-3 text-blue-600 dark:text-blue-400" size={20} />
               <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">Data Management</h3>
@@ -343,12 +336,10 @@ const Settings = () => {
                 </Button>
               </div>
             </div>
-          </div>
-        </Card>
-        
-        {/* Privacy & Legal */}
-        <Card className="mb-6 dark:bg-gray-800 dark:border-gray-700">
-          <div className="p-4">
+          </Card>
+          
+          {/* Privacy & Legal */}
+          <Card className="p-4 dark:bg-gray-800 dark:border-gray-700">
             <div className="flex items-center mb-3 px-2">
               <Shield className="mr-3 text-orange-600 dark:text-orange-400" size={20} />
               <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">Privacy & Legal</h3>
@@ -376,12 +367,10 @@ const Settings = () => {
                 description="Terms and conditions for using ChainReact"
               />
             </div>
-          </div>
-        </Card>
-        
-        {/* Developer Info */}
-        <Card className="mb-6 dark:bg-gray-800 dark:border-gray-700">
-          <div className="p-4">
+          </Card>
+          
+          {/* Developer Info */}
+          <Card className="p-4 dark:bg-gray-800 dark:border-gray-700">
             <div className="flex items-center mb-3 px-2">
               <Info className="mr-3 text-gray-600 dark:text-gray-400" size={20} />
               <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">Developer Info</h3>
@@ -402,31 +391,31 @@ const Settings = () => {
                 description="Version number and developer information"
               />
             </div>
-          </div>
-        </Card>
-        
-        {/* About */}
-        <Card className="p-6 dark:bg-gray-800 dark:border-gray-700">
-          <div className="text-center">
-            <h3 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-2">About ChainReact</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">A minimalist, gamified habit tracker built to run 100% offline</p>
-            
-            <div className="bg-blue-50 border border-blue-100 rounded-lg p-4 flex items-start dark:bg-blue-900/30 dark:border-blue-900 mb-6">
-              <AlertCircle size={18} className="text-blue-500 mr-3 mt-0.5 flex-shrink-0" />
-              <p className="text-xs text-blue-700 dark:text-blue-300 leading-relaxed text-left">
-                All your data is stored locally on your device. No internet connection is required, and your information is never sent to any server.
-              </p>
+          </Card>
+          
+          {/* About */}
+          <Card className="p-6 dark:bg-gray-800 dark:border-gray-700">
+            <div className="text-center">
+              <h3 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-2">About ChainReact</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">A minimalist, gamified habit tracker built to run 100% offline</p>
+              
+              <div className="bg-blue-50 border border-blue-100 rounded-lg p-4 flex items-start dark:bg-blue-900/30 dark:border-blue-900 mb-6">
+                <AlertCircle size={18} className="text-blue-500 mr-3 mt-0.5 flex-shrink-0" />
+                <p className="text-xs text-blue-700 dark:text-blue-300 leading-relaxed text-left">
+                  All your data is stored locally on your device. No internet connection is required, and your information is never sent to any server.
+                </p>
+              </div>
+              
+              <div>
+                <p className="text-sm text-gray-500 dark:text-gray-400 flex items-center justify-center gap-2 mb-2">
+                  ChainReact v1.0.0
+                  <Badge className="bg-blue-500 text-white text-[10px] h-4">Beta</Badge>
+                </p>
+                <p className="text-xs text-gray-400 dark:text-gray-500">Build momentum. One habit at a time.</p>
+              </div>
             </div>
-            
-            <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400 flex items-center justify-center gap-2 mb-2">
-                ChainReact v1.0.0
-                <Badge className="bg-blue-500 text-white text-[10px] h-4">Beta</Badge>
-              </p>
-              <p className="text-xs text-gray-400 dark:text-gray-500">Build momentum. One habit at a time.</p>
-            </div>
-          </div>
-        </Card>
+          </Card>
+        </div>
       </main>
     </div>
   );
