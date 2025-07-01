@@ -44,4 +44,7 @@ export type AppSettings = {
   notificationsEnabled: boolean;
   darkMode: boolean;
   reminderTime: string; // 24 hour format: "HH:MM"
+  theme: string;
+  soundEnabled: boolean;
+  soundVolume: number;
 };

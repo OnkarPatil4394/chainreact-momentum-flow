@@ -74,7 +74,10 @@ const initialStats: UserStats = {
 const initialSettings: AppSettings = {
   notificationsEnabled: false,
   darkMode: false,
-  reminderTime: "09:00"
+  reminderTime: "09:00",
+  theme: "blue",
+  soundEnabled: true,
+  soundVolume: 0.5
 };
 
 // Database operations with performance monitoring
@@ -314,6 +317,16 @@ class Database {
 
   saveSettings(settings: AppSettings): void {
     secureStorage.setItem("settings", settings);
+  }
+
+  // Update settings method
+  updateSettings(settings: AppSettings): void {
+    this.saveSettings(settings);
+  }
+
+  // Clear all data method
+  clearAllData(): void {
+    secureStorage.clear();
   }
 
   // Check and update badges
