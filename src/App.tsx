@@ -8,6 +8,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Stats from "./pages/Stats";
 import Settings from "./pages/Settings";
+import DevBlog from "./pages/DevBlog";
 import NotFound from "./pages/NotFound";
 import LoadingScreen from "./components/LoadingScreen";
 import WelcomeScreen from "./components/WelcomeScreen";
@@ -151,6 +152,7 @@ const App = () => {
                 <Route path="/" element={<Index />} />
                 <Route path="/stats" element={<Stats />} />
                 <Route path="/settings" element={<Settings />} />
+                <Route path="/devblog" element={<DevBlog />} />
                 
                 {/* Legal & Info Routes */}
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />

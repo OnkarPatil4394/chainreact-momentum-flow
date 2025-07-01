@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, ExternalLink, Trophy, FileText, Linkedin, Github, Hash } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Trophy, FileText, Linkedin, Github, Hash, BookOpen } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
 
@@ -95,6 +95,25 @@ const AppVersionInfo = () => {
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 vaiondevelopers@gmail.com
               </p>
+            </div>
+
+            <div className="border-t border-gray-100 dark:border-gray-800 pt-4">
+              <h3 className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-3">Development Blog</h3>
+              <button
+                onClick={() => navigate('/devblog')}
+                className="w-full flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors text-left"
+              >
+                <div className="flex items-center">
+                  <div className="h-8 w-8 flex items-center justify-center text-gray-600 dark:text-gray-400 mr-3">
+                    <BookOpen size={18} />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-800 dark:text-gray-200">ChainReact DevBlog</h4>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Read about our development journey</p>
+                  </div>
+                </div>
+                <ArrowLeft size={16} className="text-gray-400 dark:text-gray-500 rotate-180" />
+              </button>
             </div>
 
             <div className="border-t border-gray-100 dark:border-gray-800 pt-4">
