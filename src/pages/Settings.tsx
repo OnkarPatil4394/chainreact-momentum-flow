@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -7,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, Download, Upload, Trash2, Moon, Sun, Volume2, VolumeX, ExternalLink, Shield, FileText, Info, BookOpen, Palette } from 'lucide-react';
+import { ArrowLeft, Download, Upload, Trash2, ExternalLink, Shield, FileText, Info } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from "@/hooks/use-toast";
 import { db } from '@/db/database';
@@ -17,40 +16,10 @@ const Settings = () => {
   const { toast } = useToast();
   const [settings, setSettings] = useState(db.getSettings());
 
-  // Apply theme on component mount and when theme changes
-  useEffect(() => {
-    applyTheme(settings.theme, settings.darkMode);
-  }, [settings.theme, settings.darkMode]);
-
-  const applyTheme = (theme: string, darkMode: boolean) => {
-    // Remove existing theme classes
-    document.documentElement.classList.remove(
-      'theme-default', 'theme-sage', 'theme-lavender', 
-      'theme-peach', 'theme-ocean', 'theme-rose'
-    );
-    
-    // Apply new theme class
-    document.documentElement.classList.add(`theme-${theme}`);
-    
-    // Apply dark mode
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  };
-
   const handleSettingChange = (key: string, value: any) => {
     const newSettings = { ...settings, [key]: value };
     setSettings(newSettings);
     db.updateSettings(newSettings);
-    
-    // Apply theme changes immediately
-    if (key === 'theme') {
-      applyTheme(value, settings.darkMode);
-    } else if (key === 'darkMode') {
-      applyTheme(settings.theme, value);
-    }
     
     toast({
       title: "Settings updated",
@@ -135,15 +104,6 @@ const Settings = () => {
     }
   };
 
-  const themeOptions = [
-    { value: 'default', label: 'No Color', description: 'Clean minimal design' },
-    { value: 'sage', label: 'Sage Green', description: 'Calming nature-inspired' },
-    { value: 'lavender', label: 'Soft Lavender', description: 'Gentle and relaxing' },
-    { value: 'peach', label: 'Warm Peach', description: 'Soft and welcoming' },
-    { value: 'ocean', label: 'Ocean Blue', description: 'Peaceful and serene' },
-    { value: 'rose', label: 'Dusty Rose', description: 'Elegant and subtle' }
-  ];
-
   const legalPages = [
     {
       title: "Privacy Policy",
@@ -180,115 +140,6 @@ const Settings = () => {
       </div>
 
       <div className="space-y-6">
-        {/* Appearance Settings */}
-        <Card className="dark:bg-gray-800 dark:border-gray-700">
-          <CardHeader>
-            <CardTitle className="flex items-center text-gray-800 dark:text-gray-100">
-              <Palette size={18} className="mr-2" />
-              Appearance
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex flex-col">
-                <Label htmlFor="dark-mode" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Dark Mode
-                </Label>
-                <span className="text-xs text-gray-500 dark:text-gray-400">
-                  Switch between light and dark themes
-                </span>
-              </div>
-              <Switch
-                id="dark-mode"
-                checked={settings.darkMode}
-                onCheckedChange={(checked) => handleSettingChange('darkMode', checked)}
-              />
-            </div>
-            
-            <Separator className="dark:bg-gray-700" />
-            
-            <div className="space-y-3">
-              <div className="flex items-center">
-                <Label className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center">
-                  <Palette size={16} className="mr-2" />
-                  Theme Color
-                </Label>
-              </div>
-              <Select 
-                value={settings.theme} 
-                onValueChange={(value) => handleSettingChange('theme', value)}
-              >
-                <SelectTrigger className="dark:bg-gray-700 dark:border-gray-600">
-                  <SelectValue placeholder="Select theme" />
-                </SelectTrigger>
-                <SelectContent className="dark:bg-gray-800 dark:border-gray-600">
-                  {themeOptions.map((theme) => (
-                    <SelectItem key={theme.value} value={theme.value}>
-                      <div className="flex flex-col">
-                        <span className="font-medium">{theme.label}</span>
-                        <span className="text-xs text-gray-500 dark:text-gray-400">{theme.description}</span>
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                Calming colors with subtle patterns that work in both light and dark modes
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Audio Settings */}
-        <Card className="dark:bg-gray-800 dark:border-gray-700">
-          <CardHeader>
-            <CardTitle className="flex items-center text-gray-800 dark:text-gray-100">
-              {settings.soundEnabled ? <Volume2 size={18} className="mr-2" /> : <VolumeX size={18} className="mr-2" />}
-              Audio
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex flex-col">
-                <Label htmlFor="sound-enabled" className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Sound Effects
-                </Label>
-                <span className="text-xs text-gray-500 dark:text-gray-400">
-                  Play sounds for habit completions
-                </span>
-              </div>
-              <Switch
-                id="sound-enabled"
-                checked={settings.soundEnabled}
-                onCheckedChange={(checked) => handleSettingChange('soundEnabled', checked)}
-              />
-            </div>
-            
-            <Separator className="dark:bg-gray-700" />
-            
-            <div className="space-y-2">
-              <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Sound Volume
-              </Label>
-              <Select 
-                value={settings.soundVolume.toString()} 
-                onValueChange={(value) => handleSettingChange('soundVolume', parseFloat(value))}
-                disabled={!settings.soundEnabled}
-              >
-                <SelectTrigger className="dark:bg-gray-700 dark:border-gray-600">
-                  <SelectValue placeholder="Select volume" />
-                </SelectTrigger>
-                <SelectContent className="dark:bg-gray-800 dark:border-gray-600">
-                  <SelectItem value="0.3">Low</SelectItem>
-                  <SelectItem value="0.5">Medium</SelectItem>
-                  <SelectItem value="0.8">High</SelectItem>
-                  <SelectItem value="1.0">Maximum</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </CardContent>
-        </Card>
-
         {/* Data Management */}
         <Card className="dark:bg-gray-800 dark:border-gray-700">
           <CardHeader>
