@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -6,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, Download, Upload, Trash2, ExternalLink, Shield, FileText, Info } from 'lucide-react';
+import { ArrowLeft, Download, Upload, Trash2, ExternalLink, Shield, FileText, Info, Trophy, Github, Linkedin, Hash, BookOpen } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from "@/hooks/use-toast";
 import { db } from '@/db/database';
@@ -125,6 +126,43 @@ const Settings = () => {
     }
   ];
 
+  const contactLinks = [
+    {
+      title: "Product Hunt",
+      url: "https://www.producthunt.com/@vaion_developers",
+      icon: <Trophy size={18} />,
+      description: "Follow us on Product Hunt"
+    },
+    {
+      title: "Dev.to",
+      url: "https://dev.to/vaiondevelopers",
+      icon: <BookOpen size={18} />,
+      description: "Read our development blog"
+    },
+    {
+      title: "LinkedIn",
+      url: "https://www.linkedin.com/in/vaiondevelopers",
+      icon: <Linkedin size={18} />,
+      description: "Connect with us professionally"
+    },
+    {
+      title: "Indie Hackers",
+      url: "https://www.indiehackers.com/vaiondevelopers/",
+      icon: <Hash size={18} />,
+      description: "Follow our indie journey"
+    },
+    {
+      title: "GitHub",
+      url: "https://github.com/vaiondevelopers",
+      icon: <Github size={18} />,
+      description: "Check out our open source projects"
+    }
+  ];
+
+  const handleLinkClick = (url: string) => {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+
   return (
     <div className="container mx-auto px-4 py-6">
       <div className="flex items-center mb-6">
@@ -185,6 +223,35 @@ const Settings = () => {
               <Trash2 size={16} className="mr-2" />
               Clear All Data
             </Button>
+          </CardContent>
+        </Card>
+
+        {/* Developer Info */}
+        <Card className="dark:bg-gray-800 dark:border-gray-700">
+          <CardHeader>
+            <CardTitle className="text-gray-800 dark:text-gray-100">Developer Info</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              {contactLinks.map((link) => (
+                <button
+                  key={link.title}
+                  onClick={() => handleLinkClick(link.url)}
+                  className="w-full flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors text-left"
+                >
+                  <div className="flex items-center">
+                    <div className="h-8 w-8 flex items-center justify-center text-gray-600 dark:text-gray-400 mr-3">
+                      {link.icon}
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-medium text-gray-800 dark:text-gray-200">{link.title}</h4>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">{link.description}</p>
+                    </div>
+                  </div>
+                  <ExternalLink size={16} className="text-gray-400 dark:text-gray-500" />
+                </button>
+              ))}
+            </div>
           </CardContent>
         </Card>
 
