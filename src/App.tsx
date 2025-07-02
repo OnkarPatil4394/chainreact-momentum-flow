@@ -20,25 +20,35 @@ const queryClient = new QueryClient();
 const App = () => {
   // Apply theme on app startup
   useEffect(() => {
-    const settings = db.getSettings();
-    applyTheme(settings.theme, settings.darkMode);
+    try {
+      const settings = db.getSettings();
+      applyTheme(settings.theme || 'default', settings.darkMode || false);
+    } catch (error) {
+      console.error('Error loading settings:', error);
+      // Apply default theme if there's an error
+      applyTheme('default', false);
+    }
   }, []);
 
   const applyTheme = (theme: string, darkMode: boolean) => {
-    // Remove existing theme classes
-    document.documentElement.classList.remove(
-      'theme-default', 'theme-sage', 'theme-lavender', 
-      'theme-peach', 'theme-ocean', 'theme-rose'
-    );
-    
-    // Apply new theme class
-    document.documentElement.classList.add(`theme-${theme}`);
-    
-    // Apply dark mode
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
+    try {
+      // Remove existing theme classes
+      document.documentElement.classList.remove(
+        'theme-default', 'theme-sage', 'theme-lavender', 
+        'theme-peach', 'theme-ocean', 'theme-rose'
+      );
+      
+      // Apply new theme class
+      document.documentElement.classList.add(`theme-${theme}`);
+      
+      // Apply dark mode
+      if (darkMode) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    } catch (error) {
+      console.error('Error applying theme:', error);
     }
   };
 
