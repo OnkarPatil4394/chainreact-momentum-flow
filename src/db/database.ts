@@ -75,7 +75,7 @@ const initialSettings: AppSettings = {
   notificationsEnabled: false,
   darkMode: false,
   reminderTime: "09:00",
-  theme: "blue",
+  theme: "default",
   soundEnabled: true,
   soundVolume: 0.5
 };

@@ -36,20 +36,84 @@
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Theme colors - Calming palettes */
+    --theme-primary: 222.2 47.4% 11.2%;
+    --theme-primary-foreground: 210 40% 98%;
+    --theme-accent: 210 40% 96.1%;
+    --theme-accent-foreground: 222.2 47.4% 11.2%;
+  }
+
+  /* Default theme (no color) */
+  .theme-default {
+    --theme-primary: 222.2 47.4% 11.2%;
+    --theme-primary-foreground: 210 40% 98%;
+    --theme-accent: 210 40% 96.1%;
+    --theme-accent-foreground: 222.2 47.4% 11.2%;
+  }
+
+  /* Sage Green Theme */
+  .theme-sage {
+    --theme-primary: 151 29% 35%;
+    --theme-primary-foreground: 0 0% 98%;
+    --theme-accent: 151 20% 92%;
+    --theme-accent-foreground: 151 29% 25%;
+    background-image: radial-gradient(circle at 1px 1px, rgba(139, 195, 170, 0.03) 1px, transparent 0);
+    background-size: 20px 20px;
+  }
+
+  /* Soft Lavender Theme */
+  .theme-lavender {
+    --theme-primary: 262 31% 45%;
+    --theme-primary-foreground: 0 0% 98%;
+    --theme-accent: 262 20% 94%;
+    --theme-accent-foreground: 262 31% 35%;
+    background-image: linear-gradient(45deg, rgba(186, 164, 217, 0.02) 25%, transparent 25%),
+                      linear-gradient(-45deg, rgba(186, 164, 217, 0.02) 25%, transparent 25%);
+    background-size: 30px 30px;
+  }
+
+  /* Warm Peach Theme */
+  .theme-peach {
+    --theme-primary: 25 65% 55%;
+    --theme-primary-foreground: 0 0% 98%;
+    --theme-accent: 25 35% 95%;
+    --theme-accent-foreground: 25 65% 35%;
+    background-image: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      rgba(255, 204, 188, 0.02) 10px,
+      rgba(255, 204, 188, 0.02) 20px
+    );
+  }
+
+  /* Ocean Blue Theme */
+  .theme-ocean {
+    --theme-primary: 207 44% 45%;
+    --theme-primary-foreground: 0 0% 98%;
+    --theme-accent: 207 25% 94%;
+    --theme-accent-foreground: 207 44% 35%;
+    background-image: radial-gradient(circle at 2px 2px, rgba(147, 197, 253, 0.03) 2px, transparent 0);
+    background-size: 25px 25px;
+  }
+
+  /* Dusty Rose Theme */
+  .theme-rose {
+    --theme-primary: 343 35% 55%;
+    --theme-primary-foreground: 0 0% 98%;
+    --theme-accent: 343 20% 95%;
+    --theme-accent-foreground: 343 35% 35%;
+    background-image: linear-gradient(60deg, rgba(229, 180, 192, 0.02) 25%, transparent 25%),
+                      linear-gradient(120deg, rgba(229, 180, 192, 0.02) 25%, transparent 25%);
+    background-size: 40px 40px;
   }
 
   .dark {
@@ -89,6 +153,66 @@
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
+
+  /* Dark mode theme variations */
+  .dark.theme-default {
+    --theme-primary: 210 40% 98%;
+    --theme-primary-foreground: 222.2 47.4% 11.2%;
+    --theme-accent: 217.2 32.6% 17.5%;
+    --theme-accent-foreground: 210 40% 98%;
+  }
+
+  .dark.theme-sage {
+    --theme-primary: 151 35% 65%;
+    --theme-primary-foreground: 222.2 84% 4.9%;
+    --theme-accent: 151 15% 15%;
+    --theme-accent-foreground: 151 35% 75%;
+    background-image: radial-gradient(circle at 1px 1px, rgba(139, 195, 170, 0.08) 1px, transparent 0);
+    background-size: 20px 20px;
+  }
+
+  .dark.theme-lavender {
+    --theme-primary: 262 40% 70%;
+    --theme-primary-foreground: 222.2 84% 4.9%;
+    --theme-accent: 262 20% 15%;
+    --theme-accent-foreground: 262 40% 80%;
+    background-image: linear-gradient(45deg, rgba(186, 164, 217, 0.06) 25%, transparent 25%),
+                      linear-gradient(-45deg, rgba(186, 164, 217, 0.06) 25%, transparent 25%);
+    background-size: 30px 30px;
+  }
+
+  .dark.theme-peach {
+    --theme-primary: 25 70% 70%;
+    --theme-primary-foreground: 222.2 84% 4.9%;
+    --theme-accent: 25 25% 15%;
+    --theme-accent-foreground: 25 70% 80%;
+    background-image: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      rgba(255, 204, 188, 0.06) 10px,
+      rgba(255, 204, 188, 0.06) 20px
+    );
+  }
+
+  .dark.theme-ocean {
+    --theme-primary: 207 55% 70%;
+    --theme-primary-foreground: 222.2 84% 4.9%;
+    --theme-accent: 207 30% 15%;
+    --theme-accent-foreground: 207 55% 80%;
+    background-image: radial-gradient(circle at 2px 2px, rgba(147, 197, 253, 0.08) 2px, transparent 0);
+    background-size: 25px 25px;
+  }
+
+  .dark.theme-rose {
+    --theme-primary: 343 45% 70%;
+    --theme-primary-foreground: 222.2 84% 4.9%;
+    --theme-accent: 343 25% 15%;
+    --theme-accent-foreground: 343 45% 80%;
+    background-image: linear-gradient(60deg, rgba(229, 180, 192, 0.06) 25%, transparent 25%),
+                      linear-gradient(120deg, rgba(229, 180, 192, 0.06) 25%, transparent 25%);
+    background-size: 40px 40px;
+  }
 }
 
 @layer base {
@@ -103,5 +227,25 @@
   
   .toast-container {
     @apply dark:bg-gray-800 dark:text-white;
+  }
+
+  /* Theme-aware components */
+  .theme-button {
+    background-color: hsl(var(--theme-primary));
+    color: hsl(var(--theme-primary-foreground));
+  }
+
+  .theme-button:hover {
+    background-color: hsl(var(--theme-primary) / 0.9);
+  }
+
+  .theme-accent {
+    background-color: hsl(var(--theme-accent));
+    color: hsl(var(--theme-accent-foreground));
+  }
+
+  .theme-card {
+    background-color: hsl(var(--theme-accent) / 0.3);
+    border-color: hsl(var(--theme-primary) / 0.2);
   }
 }

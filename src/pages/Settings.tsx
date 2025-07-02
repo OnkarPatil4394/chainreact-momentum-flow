@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, Download, Upload, Trash2, Moon, Sun, Volume2, VolumeX, Smartphone, ExternalLink, Shield, FileText, Info, BookOpen } from 'lucide-react';
+import { ArrowLeft, Download, Upload, Trash2, Moon, Sun, Volume2, VolumeX, ExternalLink, Shield, FileText, Info, BookOpen, Palette } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from "@/hooks/use-toast";
 import { db } from '@/db/database';
@@ -17,18 +17,39 @@ const Settings = () => {
   const { toast } = useToast();
   const [settings, setSettings] = useState(db.getSettings());
 
+  // Apply theme on component mount and when theme changes
+  useEffect(() => {
+    applyTheme(settings.theme, settings.darkMode);
+  }, [settings.theme, settings.darkMode]);
+
+  const applyTheme = (theme: string, darkMode: boolean) => {
+    // Remove existing theme classes
+    document.documentElement.classList.remove(
+      'theme-default', 'theme-sage', 'theme-lavender', 
+      'theme-peach', 'theme-ocean', 'theme-rose'
+    );
+    
+    // Apply new theme class
+    document.documentElement.classList.add(`theme-${theme}`);
+    
+    // Apply dark mode
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  };
+
   const handleSettingChange = (key: string, value: any) => {
     const newSettings = { ...settings, [key]: value };
     setSettings(newSettings);
     db.updateSettings(newSettings);
     
-    // Apply dark mode immediately
-    if (key === 'darkMode') {
-      if (value) {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
+    // Apply theme changes immediately
+    if (key === 'theme') {
+      applyTheme(value, settings.darkMode);
+    } else if (key === 'darkMode') {
+      applyTheme(settings.theme, value);
     }
     
     toast({
@@ -41,7 +62,7 @@ const Settings = () => {
   const handleExportData = () => {
     try {
       const data = db.exportData();
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const blob = new Blob([data], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -73,17 +94,21 @@ const Settings = () => {
     const reader = new FileReader();
     reader.onload = (e) => {
       try {
-        const data = JSON.parse(e.target?.result as string);
-        db.importData(data);
+        const data = e.target?.result as string;
+        const success = db.importData(data);
         
-        toast({
-          title: "Data imported",
-          description: "Your ChainReact data has been imported successfully.",
-          duration: 3000,
-        });
-        
-        // Refresh the page to show imported data
-        window.location.reload();
+        if (success) {
+          toast({
+            title: "Data imported",
+            description: "Your ChainReact data has been imported successfully.",
+            duration: 3000,
+          });
+          
+          // Refresh the page to show imported data
+          window.location.reload();
+        } else {
+          throw new Error('Import failed');
+        }
       } catch (error) {
         toast({
           title: "Import failed",
@@ -110,6 +135,15 @@ const Settings = () => {
     }
   };
 
+  const themeOptions = [
+    { value: 'default', label: 'No Color', description: 'Clean minimal design' },
+    { value: 'sage', label: 'Sage Green', description: 'Calming nature-inspired' },
+    { value: 'lavender', label: 'Soft Lavender', description: 'Gentle and relaxing' },
+    { value: 'peach', label: 'Warm Peach', description: 'Soft and welcoming' },
+    { value: 'ocean', label: 'Ocean Blue', description: 'Peaceful and serene' },
+    { value: 'rose', label: 'Dusty Rose', description: 'Elegant and subtle' }
+  ];
+
   const legalPages = [
     {
       title: "Privacy Policy",
@@ -122,18 +156,6 @@ const Settings = () => {
       path: "/terms-of-use",
       icon: <FileText size={18} />,
       description: "Terms and conditions"
-    },
-    {
-      title: "App Permissions",
-      path: "/permissions",
-      icon: <Smartphone size={18} />,
-      description: "Required permissions explained"
-    },
-    {
-      title: "Open Source Licenses",
-      path: "/opensource-licenses",
-      icon: <BookOpen size={18} />,
-      description: "Third-party licenses"
     },
     {
       title: "App Information",
@@ -162,7 +184,7 @@ const Settings = () => {
         <Card className="dark:bg-gray-800 dark:border-gray-700">
           <CardHeader>
             <CardTitle className="flex items-center text-gray-800 dark:text-gray-100">
-              {settings.darkMode ? <Moon size={18} className="mr-2" /> : <Sun size={18} className="mr-2" />}
+              <Palette size={18} className="mr-2" />
               Appearance
             </CardTitle>
           </CardHeader>
@@ -185,10 +207,13 @@ const Settings = () => {
             
             <Separator className="dark:bg-gray-700" />
             
-            <div className="space-y-2">
-              <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Theme Color
-              </Label>
+            <div className="space-y-3">
+              <div className="flex items-center">
+                <Label className="text-sm font-medium text-gray-700 dark:text-gray-300 flex items-center">
+                  <Palette size={16} className="mr-2" />
+                  Theme Color
+                </Label>
+              </div>
               <Select 
                 value={settings.theme} 
                 onValueChange={(value) => handleSettingChange('theme', value)}
@@ -197,12 +222,19 @@ const Settings = () => {
                   <SelectValue placeholder="Select theme" />
                 </SelectTrigger>
                 <SelectContent className="dark:bg-gray-800 dark:border-gray-600">
-                  <SelectItem value="blue">Blue</SelectItem>
-                  <SelectItem value="green">Green</SelectItem>
-                  <SelectItem value="purple">Purple</SelectItem>
-                  <SelectItem value="orange">Orange</SelectItem>
+                  {themeOptions.map((theme) => (
+                    <SelectItem key={theme.value} value={theme.value}>
+                      <div className="flex flex-col">
+                        <span className="font-medium">{theme.label}</span>
+                        <span className="text-xs text-gray-500 dark:text-gray-400">{theme.description}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                Calming colors with subtle patterns that work in both light and dark modes
+              </p>
             </div>
           </CardContent>
         </Card>
