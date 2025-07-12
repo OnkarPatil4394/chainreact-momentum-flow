@@ -1,5 +1,5 @@
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
@@ -15,7 +15,7 @@ interface LanguageSelectorProps {
   compact?: boolean;
 }
 
-const LanguageSelector: React.FC<LanguageSelectorProps> = ({
+const LanguageSelector: React.FC<LanguageSelectorProps> = React.memo(({
   selectedLanguage = 'en',
   onLanguageSelect,
   showSearch = true,
@@ -24,9 +24,9 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({
   const [searchTerm, setSearchTerm] = useState('');
 
   const filteredLanguages = useMemo(() => {
-    if (!searchTerm) return languages;
+    if (!searchTerm.trim()) return languages;
     
-    const term = searchTerm.toLowerCase();
+    const term = searchTerm.toLowerCase().trim();
     return languages.filter(lang => 
       lang.name.toLowerCase().includes(term) ||
       lang.nativeName.toLowerCase().includes(term) ||
@@ -34,9 +34,18 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({
     );
   }, [searchTerm]);
 
-  const getSelectedLanguage = () => {
+  const getSelectedLanguage = useCallback(() => {
     return languages.find(lang => lang.code === selectedLanguage) || languages[0];
-  };
+  }, [selectedLanguage]);
+
+  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  }, []);
+
+  const handleLanguageChange = useCallback((languageCode: string) => {
+    onLanguageSelect(languageCode);
+    console.log('Language changed to:', languageCode);
+  }, [onLanguageSelect]);
 
   return (
     <div className="space-y-4">
@@ -46,13 +55,13 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({
           <Input
             placeholder="Search languages..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={handleSearchChange}
             className="pl-10"
           />
         </div>
       )}
 
-      <Select value={selectedLanguage} onValueChange={onLanguageSelect}>
+      <Select value={selectedLanguage} onValueChange={handleLanguageChange}>
         <SelectTrigger className="w-full">
           <SelectValue>
             <div className="flex items-center space-x-3">
@@ -101,6 +110,8 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({
       )}
     </div>
   );
-};
+});
+
+LanguageSelector.displayName = 'LanguageSelector';
 
 export default LanguageSelector;
