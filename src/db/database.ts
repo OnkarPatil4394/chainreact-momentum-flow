@@ -77,8 +77,7 @@ const initialSettings: AppSettings = {
   reminderTime: "09:00",
   theme: "default",
   soundEnabled: true,
-  soundVolume: 0.5,
-  language: "en"
+  soundVolume: 0.5
 };
 
 // Database operations with performance monitoring

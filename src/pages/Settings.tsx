@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -6,12 +7,10 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, Download, Upload, Trash2, ExternalLink, Shield, FileText, Info, Trophy, Github, Linkedin, Hash, BookOpen, Globe } from 'lucide-react';
+import { ArrowLeft, Download, Upload, Trash2, ExternalLink, Shield, FileText, Info, Trophy, Github, Linkedin, Hash, BookOpen } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from "@/hooks/use-toast";
 import { db } from '@/db/database';
-import LanguageSelector from '@/components/LanguageSelector';
-import { languages } from '@/data/languages';
 
 const Settings = () => {
   const navigate = useNavigate();
@@ -28,14 +27,6 @@ const Settings = () => {
       description: "Your preferences have been saved.",
       duration: 2000,
     });
-  };
-
-  const handleLanguageChange = (languageCode: string) => {
-    handleSettingChange('language', languageCode);
-  };
-
-  const getCurrentLanguage = () => {
-    return languages.find(lang => lang.code === settings.language) || languages[0];
   };
 
   const handleExportData = () => {
@@ -187,45 +178,6 @@ const Settings = () => {
       </div>
 
       <div className="space-y-6">
-        {/* Language Settings */}
-        <Card className="dark:bg-gray-800 dark:border-gray-700">
-          <CardHeader>
-            <CardTitle className="text-gray-800 dark:text-gray-100 flex items-center">
-              <Globe className="mr-2 h-5 w-5" />
-              Language
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                <div className="flex items-center space-x-3">
-                  <span className="text-2xl">{getCurrentLanguage().flag}</span>
-                  <div>
-                    <div className="font-medium text-gray-900 dark:text-gray-100">
-                      {getCurrentLanguage().name}
-                    </div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">
-                      {getCurrentLanguage().nativeName}
-                    </div>
-                  </div>
-                </div>
-                <Badge variant="secondary" className="dark:bg-gray-600 dark:text-gray-200">
-                  Current
-                </Badge>
-              </div>
-              
-              <Separator className="dark:bg-gray-600" />
-              
-              <LanguageSelector
-                selectedLanguage={settings.language || 'en'}
-                onLanguageSelect={handleLanguageChange}
-                showSearch={true}
-                compact={true}
-              />
-            </div>
-          </CardContent>
-        </Card>
-
         {/* Data Management */}
         <Card className="dark:bg-gray-800 dark:border-gray-700">
           <CardHeader>

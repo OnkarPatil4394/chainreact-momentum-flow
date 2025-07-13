@@ -4,23 +4,15 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { db } from '../db/database';
 import { sanitizeInput, validateInput } from '../utils/security';
-import LanguageSelectionScreen from './LanguageSelectionScreen';
 
 interface WelcomeScreenProps {
   onComplete: () => void;
 }
 
 const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onComplete }) => {
-  const [step, setStep] = useState<'language' | 'name'>('language');
   const [userName, setUserName] = useState('');
-  const [selectedLanguage, setSelectedLanguage] = useState('en');
   const [error, setError] = useState('');
   
-  const handleLanguageComplete = (languageCode: string) => {
-    setSelectedLanguage(languageCode);
-    setStep('name');
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -40,14 +32,6 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onComplete }) => {
       
       // Save the user name to the database
       db.saveUserName(sanitizedName);
-      
-      // Save language preference
-      const currentSettings = db.getSettings();
-      db.updateSettings({
-        ...currentSettings,
-        language: selectedLanguage
-      });
-      
       // Complete the welcome process
       onComplete();
     } catch (error) {
@@ -60,10 +44,6 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onComplete }) => {
     setUserName(sanitizedValue);
     if (error) setError(''); // Clear error on change
   };
-
-  if (step === 'language') {
-    return <LanguageSelectionScreen onComplete={handleLanguageComplete} />;
-  }
   
   return (
     <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-b from-blue-50 to-white p-4">

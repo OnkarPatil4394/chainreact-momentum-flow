@@ -47,12 +47,4 @@ export type AppSettings = {
   theme: string;
   soundEnabled: boolean;
   soundVolume: number;
-  language: string;
-};
-
-export type Language = {
-  code: string;
-  name: string;
-  nativeName: string;
-  flag: string;
 };
