@@ -23,8 +23,6 @@ const Settings = () => {
     setSettings(newSettings);
     db.updateSettings(newSettings);
     
-    console.log('Settings updated:', { key, value });
-    
     toast({
       title: "Settings updated",
       description: "Your preferences have been saved.",
@@ -33,21 +31,7 @@ const Settings = () => {
   };
 
   const handleLanguageChange = (languageCode: string) => {
-    console.log('Language being changed to:', languageCode);
     handleSettingChange('language', languageCode);
-    
-    // Show specific toast for language change
-    const selectedLang = languages.find(lang => lang.code === languageCode);
-    toast({
-      title: "Language updated",
-      description: `Language changed to ${selectedLang?.name || languageCode}`,
-      duration: 3000,
-    });
-    
-    // Force a small delay to ensure the change is processed
-    setTimeout(() => {
-      console.log('Current language setting:', db.getSettings().language);
-    }, 100);
   };
 
   const getCurrentLanguage = () => {
