@@ -1,8 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import StatsCard from '../components/StatsCard';
-import HowToUse from '../components/HowToUse';
 import { db } from '../db/database';
 import { UserStats, HabitChain } from '../types/types';
 import { Trophy, Calendar, Star, CheckCheck, Trash2 } from 'lucide-react';
@@ -84,9 +82,6 @@ const Stats = () => {
             Track your progress and achievements
           </p>
         </div>
-        
-        {/* How to use guide */}
-        <HowToUse />
         
         {/* Key stats */}
         <div className="grid grid-cols-2 gap-4 mb-6">
