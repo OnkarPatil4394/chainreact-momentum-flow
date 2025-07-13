@@ -1,10 +1,11 @@
+
 import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import StatsCard from '../components/StatsCard';
 import { db } from '../db/database';
 import { UserStats, HabitChain } from '../types/types';
 import { Trophy, Calendar, Star, CheckCheck, Trash2 } from 'lucide-react';
-import { playSettingsSound } from '../utils/sounds'; // Import the sound utility
+import { playSettingsSound } from '../utils/sounds';
 import { 
   AlertDialog,
   AlertDialogAction,
@@ -22,10 +23,10 @@ import { useToast } from "@/hooks/use-toast";
 const Stats = () => {
   const [stats, setStats] = useState<UserStats>(db.getStats());
   const [chains, setChains] = useState<HabitChain[]>([]);
-  const [chainToDelete, setChainToDelete] = useState<string | null>(null);
   const { toast } = useToast();
   
   useEffect(() => {
+    console.log('Stats component mounted');
     // Load data
     setStats(db.getStats());
     setChains(db.getChains());
@@ -38,6 +39,8 @@ const Stats = () => {
     
     return () => clearInterval(interval);
   }, []);
+  
+  console.log('Stats rendering with:', { stats, chains: chains.length });
   
   // Calculate completion rate
   const totalDays = chains.reduce((acc, chain) => {
@@ -181,7 +184,6 @@ const Stats = () => {
                         <Button
                           variant="ghost"
                           size="icon"
-                          onClick={() => setChainToDelete(chain.id)}
                           className="text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400"
                         >
                           <Trash2 size={18} />
