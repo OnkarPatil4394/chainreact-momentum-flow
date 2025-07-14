@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -293,7 +292,6 @@ const Settings = () => {
             </p>
             <div className="flex justify-center space-x-2 mb-4">
               <Badge variant="secondary" className="dark:bg-gray-700 dark:text-gray-300">v1.0.0</Badge>
-              <Badge variant="outline" className="dark:border-gray-600 dark:text-gray-400">Beta</Badge>
             </div>
             <p className="text-xs text-gray-500 dark:text-gray-400">
               Made with ❤️ by Vaion Developers

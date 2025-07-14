@@ -11,7 +11,6 @@ import { useNavigate } from 'react-router-dom';
 const AboutPage = () => {
   const navigate = useNavigate();
   const appVersion = "1.0.0";
-  const buildDate = "May 19, 2025";
   const developerName = "Vaion";
   const contactEmail = "vaiondevelopers@gmail.com";
 
@@ -35,7 +34,7 @@ const AboutPage = () => {
           <p className="text-sm text-gray-600 mb-4">Build momentum. One habit at a time.</p>
           
           <div className="bg-gray-100 px-4 py-2 rounded-full text-gray-700 text-xs mb-6">
-            Version {appVersion} • Built on {buildDate}
+            Version {appVersion}
           </div>
           
           <div className="border-t border-gray-100 w-full pt-4 mt-1 mb-4">

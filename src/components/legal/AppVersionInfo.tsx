@@ -1,17 +1,14 @@
-
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, ExternalLink, Trophy, FileText, Linkedin, Github, Hash, BookOpen } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { Badge } from '@/components/ui/badge';
 
 const AppVersionInfo = () => {
   const navigate = useNavigate();
   
   const appVersion = "1.0.0";
   const buildNumber = "1001";
-  const buildDate = "May 19, 2025";
 
   const contactLinks = [
     {
@@ -70,9 +67,8 @@ const AppVersionInfo = () => {
             <h1 className="text-2xl font-bold mb-1">ChainReact</h1>
             <div className="flex items-center gap-2 mb-2">
               <span className="text-gray-500 dark:text-gray-400">Version {appVersion}</span>
-              <Badge className="bg-blue-500 text-white">Beta</Badge>
             </div>
-            <p className="text-sm text-gray-500 dark:text-gray-400">Build {buildNumber} ({buildDate})</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">Build {buildNumber}</p>
           </div>
 
           <div className="space-y-4">

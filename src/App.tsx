@@ -14,15 +14,24 @@ import PrivacyPolicy from "./components/legal/PrivacyPolicy";
 import TermsOfUse from "./components/legal/TermsOfUse";
 import AboutPage from "./components/legal/AboutPage";
 import { db } from "@/db/database";
+import { performanceOptimizer } from "@/utils/performanceOptimizer";
+import { protectFromTampering } from "@/utils/security";
 
 const queryClient = new QueryClient();
 
 const App = () => {
-  // Apply theme on app startup
+  // Apply theme and initialize security/performance on app startup
   useEffect(() => {
     try {
       const settings = db.getSettings();
       applyTheme(settings.theme || 'default', settings.darkMode || false);
+      
+      // Initialize performance optimization
+      performanceOptimizer.initialize();
+      
+      // Initialize security protection
+      protectFromTampering();
+      
     } catch (error) {
       console.error('Error loading settings:', error);
       // Apply default theme if there's an error
