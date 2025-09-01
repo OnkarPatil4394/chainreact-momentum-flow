@@ -85,10 +85,10 @@ const Index = () => {
         keywords="habit tracker, daily habits, streak counter, routine builder, productivity app, habit formation, personal development, goal tracking, habit chains, motivation app"
         structuredData={homeStructuredData}
       />
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 vaion-trust">
-      <Header />
-      
-      <main className="container mx-auto px-4 py-6 pb-20">
+      <div className="app-container bg-gray-50 dark:bg-gray-900 vaion-trust">
+        <Header />
+        
+        <main className="app-main container mx-auto px-4 py-4 custom-scrollbar">
         {/* Today's date - SEO optimized header */}
         <header className="mb-4">
           <h1 className="text-xl font-bold text-gray-800 dark:text-gray-100">Daily Habit Tracker - {currentDate}</h1>

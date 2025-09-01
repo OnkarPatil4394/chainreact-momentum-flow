@@ -94,10 +94,10 @@ const Stats = () => {
         keywords="habit statistics, progress tracking, streak analysis, habit completion rate, achievement badges, habit analytics, progress charts"
         structuredData={statsStructuredData}
       />
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pb-16">
-      <Header />
-      
-      <main className="container mx-auto px-4 py-6">
+      <div className="app-container bg-gray-50 dark:bg-gray-900">
+        <Header />
+        
+        <main className="app-main container mx-auto px-4 py-4 custom-scrollbar">
         <header className="mb-6">
           <h1 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-1">Your Habit Statistics</h1>
           <p className="text-sm text-gray-600 dark:text-gray-400">

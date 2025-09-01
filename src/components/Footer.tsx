@@ -7,7 +7,7 @@ import { Shield } from 'lucide-react';
 
 const Footer = () => {
   return (
-    <footer className="vaion-trust bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 py-3 px-4">
+    <footer className="app-footer vaion-trust bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 py-2 px-4">
       <div className="container mx-auto text-center">
         <div className="flex items-center justify-center text-xs text-gray-500 dark:text-gray-400">
           <Shield size={12} className="mr-1" />

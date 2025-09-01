@@ -16,6 +16,7 @@ import AboutPage from "./components/legal/AboutPage";
 import { db } from "@/db/database";
 import { performanceOptimizer } from "@/utils/performanceOptimizer";
 import { protectFromTampering } from "@/utils/security";
+import { initializeBrowserOptimizations } from "@/utils/browserOptimization";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +32,9 @@ const App = () => {
       
       // Initialize security protection
       protectFromTampering();
+      
+      // Initialize browser optimizations
+      initializeBrowserOptimizations();
       
     } catch (error) {
       console.error('Error loading settings:', error);

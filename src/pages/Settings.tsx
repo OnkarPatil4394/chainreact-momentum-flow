@@ -182,144 +182,146 @@ const Settings = () => {
         keywords="app settings, habit tracker preferences, dark mode, themes, notifications, customization, personalization"
         structuredData={settingsStructuredData}
       />
-      <div className="container mx-auto px-4 py-6">
-      <div className="flex items-center mb-6">
-        <Button 
-          variant="ghost" 
-          size="sm" 
-          onClick={() => navigate('/')}
-          className="mr-2"
-        >
-          <ArrowLeft size={16} />
-        </Button>
-        <h1 className="text-xl font-bold text-gray-800 dark:text-gray-100">Settings & Preferences</h1>
-      </div>
-
-      <div className="space-y-6">
-        {/* Data Management */}
-        <Card className="dark:bg-gray-800 dark:border-gray-700">
-          <CardHeader>
-            <CardTitle className="text-gray-800 dark:text-gray-100">Data Management</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Button 
-                onClick={handleExportData}
-                variant="outline"
-                className="flex items-center justify-center dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
-              >
-                <Download size={16} className="mr-2" />
-                Export Data
-              </Button>
-              
-              <div>
-                <input
-                  type="file"
-                  accept=".json"
-                  onChange={handleImportData}
-                  className="hidden"
-                  id="import-file"
-                />
-                <Button 
-                  onClick={() => document.getElementById('import-file')?.click()}
-                  variant="outline"
-                  className="flex items-center justify-center w-full dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
-                >
-                  <Upload size={16} className="mr-2" />
-                  Import Data
-                </Button>
-              </div>
-            </div>
-            
-            <Separator className="dark:bg-gray-700" />
-            
+      <div className="app-container bg-gray-50 dark:bg-gray-900">
+        <div className="app-main container mx-auto px-4 py-4 custom-scrollbar">
+          <div className="flex items-center mb-6">
             <Button 
-              onClick={handleClearAllData}
-              variant="outline"
-              className="w-full border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 dark:border-red-900 dark:text-red-400 dark:hover:bg-red-950"
+              variant="ghost" 
+              size="sm" 
+              onClick={() => navigate('/')}
+              className="mr-2"
             >
-              <Trash2 size={16} className="mr-2" />
-              Clear All Data
+              <ArrowLeft size={16} />
             </Button>
-          </CardContent>
-        </Card>
+            <h1 className="text-xl font-bold text-gray-800 dark:text-gray-100">Settings & Preferences</h1>
+          </div>
 
-        {/* Developer Info */}
-        <Card className="dark:bg-gray-800 dark:border-gray-700">
-          <CardHeader>
-            <CardTitle className="text-gray-800 dark:text-gray-100">Developer Info</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              {contactLinks.map((link) => (
-                <button
-                  key={link.title}
-                  onClick={() => handleLinkClick(link.url)}
-                  className="w-full flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors text-left"
-                >
-                  <div className="flex items-center">
-                    <div className="h-8 w-8 flex items-center justify-center text-gray-600 dark:text-gray-400 mr-3">
-                      {link.icon}
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-800 dark:text-gray-200">{link.title}</h4>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">{link.description}</p>
-                    </div>
+          <div className="space-y-6">
+            {/* Data Management */}
+            <Card className="dark:bg-gray-800 dark:border-gray-700">
+              <CardHeader>
+                <CardTitle className="text-gray-800 dark:text-gray-100">Data Management</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Button 
+                    onClick={handleExportData}
+                    variant="outline"
+                    className="flex items-center justify-center dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
+                  >
+                    <Download size={16} className="mr-2" />
+                    Export Data
+                  </Button>
+                  
+                  <div>
+                    <input
+                      type="file"
+                      accept=".json"
+                      onChange={handleImportData}
+                      className="hidden"
+                      id="import-file"
+                    />
+                    <Button 
+                      onClick={() => document.getElementById('import-file')?.click()}
+                      variant="outline"
+                      className="flex items-center justify-center w-full dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
+                    >
+                      <Upload size={16} className="mr-2" />
+                      Import Data
+                    </Button>
                   </div>
-                  <ExternalLink size={16} className="text-gray-400 dark:text-gray-500" />
-                </button>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Legal & Information */}
-        <Card className="dark:bg-gray-800 dark:border-gray-700">
-          <CardHeader>
-            <CardTitle className="text-gray-800 dark:text-gray-100">Legal & Information</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              {legalPages.map((page) => (
-                <button
-                  key={page.path}
-                  onClick={() => navigate(page.path)}
-                  className="w-full flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors text-left"
+                </div>
+                
+                <Separator className="dark:bg-gray-700" />
+                
+                <Button 
+                  onClick={handleClearAllData}
+                  variant="outline"
+                  className="w-full border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 dark:border-red-900 dark:text-red-400 dark:hover:bg-red-950"
                 >
-                  <div className="flex items-center">
-                    <div className="h-8 w-8 flex items-center justify-center text-gray-600 dark:text-gray-400 mr-3">
-                      {page.icon}
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-800 dark:text-gray-200">{page.title}</h4>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">{page.description}</p>
-                    </div>
-                  </div>
-                  <ExternalLink size={16} className="text-gray-400 dark:text-gray-500" />
-                </button>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+                  <Trash2 size={16} className="mr-2" />
+                  Clear All Data
+                </Button>
+              </CardContent>
+            </Card>
 
-        {/* About Section */}
-        <Card className="dark:bg-gray-800 dark:border-gray-700">
-          <CardContent className="p-6 text-center">
-            <h3 className="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-100">ChainReact</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-              Build momentum. One habit at a time.
-            </p>
-            <div className="flex justify-center space-x-2 mb-4">
-              <Badge variant="secondary" className="dark:bg-gray-700 dark:text-gray-300">v1.0.0</Badge>
-            </div>
-            <p className="text-xs text-gray-500 dark:text-gray-400">
-              Made with ❤️ by Vaion Developers
-            </p>
-          </CardContent>
-        </Card>
+            {/* Developer Info */}
+            <Card className="dark:bg-gray-800 dark:border-gray-700">
+              <CardHeader>
+                <CardTitle className="text-gray-800 dark:text-gray-100">Developer Info</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  {contactLinks.map((link) => (
+                    <button
+                      key={link.title}
+                      onClick={() => handleLinkClick(link.url)}
+                      className="w-full flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors text-left"
+                    >
+                      <div className="flex items-center">
+                        <div className="h-8 w-8 flex items-center justify-center text-gray-600 dark:text-gray-400 mr-3">
+                          {link.icon}
+                        </div>
+                        <div>
+                          <h4 className="text-sm font-medium text-gray-800 dark:text-gray-200">{link.title}</h4>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">{link.description}</p>
+                        </div>
+                      </div>
+                      <ExternalLink size={16} className="text-gray-400 dark:text-gray-500" />
+                    </button>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Legal & Information */}
+            <Card className="dark:bg-gray-800 dark:border-gray-700">
+              <CardHeader>
+                <CardTitle className="text-gray-800 dark:text-gray-100">Legal & Information</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  {legalPages.map((page) => (
+                    <button
+                      key={page.path}
+                      onClick={() => navigate(page.path)}
+                      className="w-full flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors text-left"
+                    >
+                      <div className="flex items-center">
+                        <div className="h-8 w-8 flex items-center justify-center text-gray-600 dark:text-gray-400 mr-3">
+                          {page.icon}
+                        </div>
+                        <div>
+                          <h4 className="text-sm font-medium text-gray-800 dark:text-gray-200">{page.title}</h4>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">{page.description}</p>
+                        </div>
+                      </div>
+                      <ExternalLink size={16} className="text-gray-400 dark:text-gray-500" />
+                    </button>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* About Section */}
+            <Card className="dark:bg-gray-800 dark:border-gray-700">
+              <CardContent className="p-6 text-center">
+                <h3 className="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-100">ChainReact</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                  Build momentum. One habit at a time.
+                </p>
+                <div className="flex justify-center space-x-2 mb-4">
+                  <Badge variant="secondary" className="dark:bg-gray-700 dark:text-gray-300">v1.0.0</Badge>
+                </div>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  Made with ❤️ by Vaion Developers
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
       </div>
-    </div>
-  </>
+    </>
   );
 };
 
