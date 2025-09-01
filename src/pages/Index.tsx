@@ -12,6 +12,7 @@ import HowToUse from '../components/HowToUse';
 import Footer from '../components/Footer';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
+import SEO from '@/components/SEO';
 
 const Index = () => {
   const [chains, setChains] = useState<HabitChainType[]>([]);
@@ -54,16 +55,45 @@ const Index = () => {
     day: 'numeric'
   });
   
+  const homeStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "ChainReact",
+    "description": "Transform your life with ChainReact, the ultimate habit tracking app. Build powerful daily routines, track streaks, and create lasting positive change through consistent habit formation.",
+    "url": window.location.origin,
+    "applicationCategory": "LifestyleApplication",
+    "operatingSystem": "Web Browser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "featureList": [
+      "Daily habit tracking",
+      "Streak counters",
+      "Progress analytics",
+      "Customizable habit chains",
+      "Dark mode support"
+    ]
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 vaion-trust">
+    <>
+      <SEO 
+        title="ChainReact - Build momentum. One habit at a time."
+        description="Transform your life with ChainReact, the ultimate habit tracking app. Build powerful daily routines, track streaks, and create lasting positive change through consistent habit formation."
+        keywords="habit tracker, daily habits, streak counter, routine builder, productivity app, habit formation, personal development, goal tracking, habit chains, motivation app"
+        structuredData={homeStructuredData}
+      />
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 vaion-trust">
       <Header />
       
       <main className="container mx-auto px-4 py-6 pb-20">
-        {/* Today's date */}
-        <div className="mb-4">
-          <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">{currentDate}</h2>
-          <p className="text-sm text-gray-600 dark:text-gray-400">Your daily habit chains</p>
-        </div>
+        {/* Today's date - SEO optimized header */}
+        <header className="mb-4">
+          <h1 className="text-xl font-bold text-gray-800 dark:text-gray-100">Daily Habit Tracker - {currentDate}</h1>
+          <p className="text-sm text-gray-600 dark:text-gray-400">Build momentum with your daily habit chains</p>
+        </header>
         
         {/* How to use section */}
         <HowToUse />
@@ -102,17 +132,18 @@ const Index = () => {
             </p>
           </div>
         )}
-      </main>
-      
-      <Footer />
+        </main>
+        
+        <Footer />
       
       {/* Create/Edit habit modal */}
       <CreateHabitModal 
         open={isCreateModalOpen} 
         onClose={handleCloseCreateModal}
         editingChain={editingChain} 
-      />
-    </div>
+        />
+      </div>
+    </>
   );
 };
 

@@ -10,6 +10,7 @@ import { ArrowLeft, Download, Upload, Trash2, ExternalLink, Shield, FileText, In
 import { useNavigate } from 'react-router-dom';
 import { useToast } from "@/hooks/use-toast";
 import { db } from '@/db/database';
+import SEO from '@/components/SEO';
 
 const Settings = () => {
   const navigate = useNavigate();
@@ -162,8 +163,26 @@ const Settings = () => {
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
+  const settingsStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Settings - ChainReact Habit Tracker",
+    "description": "Customize your ChainReact experience with themes, notifications, and app preferences. Personalize your habit tracking journey.",
+    "isPartOf": {
+      "@type": "WebApplication",
+      "name": "ChainReact"
+    }
+  };
+
   return (
-    <div className="container mx-auto px-4 py-6">
+    <>
+      <SEO 
+        title="Settings & Preferences - ChainReact"
+        description="Customize your ChainReact experience with themes, dark mode, notifications, and app preferences. Personalize your habit tracking journey for maximum productivity."
+        keywords="app settings, habit tracker preferences, dark mode, themes, notifications, customization, personalization"
+        structuredData={settingsStructuredData}
+      />
+      <div className="container mx-auto px-4 py-6">
       <div className="flex items-center mb-6">
         <Button 
           variant="ghost" 
@@ -173,7 +192,7 @@ const Settings = () => {
         >
           <ArrowLeft size={16} />
         </Button>
-        <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">Settings</h2>
+        <h1 className="text-xl font-bold text-gray-800 dark:text-gray-100">Settings & Preferences</h1>
       </div>
 
       <div className="space-y-6">
@@ -300,6 +319,7 @@ const Settings = () => {
         </Card>
       </div>
     </div>
+  </>
   );
 };
 

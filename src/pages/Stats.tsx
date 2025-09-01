@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import SEO from '@/components/SEO';
 
 const Stats = () => {
   const [stats, setStats] = useState<UserStats>(db.getStats());
@@ -74,17 +75,35 @@ const Stats = () => {
     });
   };
   
+  const statsStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Habit Tracking Statistics - ChainReact",
+    "description": "View your habit tracking progress, streaks, completion rates, and achievements. Analyze your daily habits and celebrate your consistency milestones.",
+    "isPartOf": {
+      "@type": "WebApplication",
+      "name": "ChainReact"
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pb-16">
+    <>
+      <SEO 
+        title="Stats & Progress - ChainReact Habit Tracker"
+        description="View your habit tracking progress, streaks, completion rates, and achievements. Analyze your daily habits and celebrate your consistency milestones with detailed statistics."
+        keywords="habit statistics, progress tracking, streak analysis, habit completion rate, achievement badges, habit analytics, progress charts"
+        structuredData={statsStructuredData}
+      />
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pb-16">
       <Header />
       
       <main className="container mx-auto px-4 py-6">
-        <div className="mb-6">
-          <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-1">Your Statistics</h2>
+        <header className="mb-6">
+          <h1 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-1">Your Habit Statistics</h1>
           <p className="text-sm text-gray-600 dark:text-gray-400">
             Track your progress and achievements
           </p>
-        </div>
+        </header>
         
         {/* Key stats */}
         <div className="grid grid-cols-2 gap-4 mb-6">
@@ -219,6 +238,7 @@ const Stats = () => {
         </div>
       </main>
     </div>
+  </>
   );
 };
 
